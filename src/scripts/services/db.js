@@ -38,15 +38,18 @@ angular.module('financier').provider('db', function () {
       const options = {
         live: true,
         retry: true,
-        batch_size: 500
+        batch_size: 500,
+        auth: {username: 'admin3', password: 'password'}
       };
 
       cancelSync();
 
-      const host = window.location.host;
+      // const host = window.location.host;
+      const dbUrl = 'http://192.168.1.76:5984/fin';
+      isValidSub = true;
 
       if (isValidSub) {
-        sync = db.sync(`https://${host}/db/${dbName}`, options)
+        sync = db.sync(dbUrl, options)
         .on('paused', function () {
           $rootScope.$apply(() => {
             // user went offline
@@ -54,7 +57,7 @@ angular.module('financier').provider('db', function () {
           });
         });
       } else {
-        sync = PouchDB.replicate(`https://${host}/db/${dbName}`, db, options)
+        sync = PouchDB.replicate(dbUrl, db, options)
         .on('paused', function () {
           $rootScope.$apply(() => {
             // user went offline
@@ -115,12 +118,14 @@ angular.module('financier').provider('db', function () {
     }
 
     function create() {
-      db = new PouchDB('financier', {
+      db = new PouchDB('fin', {
         adapter: that.adapter,
         size: 50,
         auto_compaction: true
       });
     }
+
+
 
     function budget(budgetId) {
 

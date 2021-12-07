@@ -130,6 +130,7 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
   };
 
   getSession();
+  db.sync.start(this.userDb, true);
 
   $scope.$on('login', () => {
     getSession();
