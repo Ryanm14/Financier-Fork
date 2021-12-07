@@ -1,5 +1,5 @@
-<h1 align="center">financier</h1>
-
+<h1 align="center">Ryan's Fork of Palidanx's Financier (https://gitlab.com/palidanx/financier)</h1>
+<h1 align="center">Original Version Financier by Alexander Hardling (https://gitlab.com/financier/financier)</h1>
 <p align="center">
   <a href="https://gitlab.com/financier/financier">⚙ Gitlab</a> —
   <a href="https://app.financier.io">💰 Production app</a> —
