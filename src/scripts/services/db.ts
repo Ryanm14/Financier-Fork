@@ -1,12 +1,14 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'pouc... Remove this comment to see the full error message
 import PouchDB from 'pouchdb';
 
-angular.module('financier').provider('db', function () {
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
+angular.module('financier').provider('db', function(this: any) {
   const that = this;
 
   that.adapter = null;
 
-  this.$get = (Budget, BudgetOpened, budgetManager, $http, $rootScope) => {
-    let db, sync, changes;
+  this.$get = (Budget: any, BudgetOpened: any, budgetManager: any, $http: any, $rootScope: any) => {
+    let db: any, sync: any, changes: any;
 
     create();
 
@@ -34,7 +36,7 @@ angular.module('financier').provider('db', function () {
       }
     }
 
-    function startSync(dbName, isValidSub) {
+    function startSync(dbName: any, isValidSub: any) {
       const options = {
         live: true,
         retry: true,
@@ -86,7 +88,7 @@ angular.module('financier').provider('db', function () {
         $rootScope.$broadcast('syncStatus:update', 'error');
         // handle complete
       })
-      .on('error', err => {
+      .on('error', (err: any) => {
         $rootScope.$apply(() => {
           console.log('sync error', err);
 
@@ -99,12 +101,12 @@ angular.module('financier').provider('db', function () {
         since: 'now',
         live: true,
         include_docs: true
-      }).on('change', change => {
+      }).on('change', (change: any) => {
         // received a change
         $rootScope.$apply(() => {
           $rootScope.$broadcast('pouchdb:change', change);
         });
-      }).on('error', err => {
+      }).on('error', (err: any) => {
         // handle errors
         console.log('error subscribing to changes feed', err);
       });
@@ -127,21 +129,21 @@ angular.module('financier').provider('db', function () {
 
 
 
-    function budget(budgetId) {
+    function budget(budgetId: any) {
 
       return budgetManager(db, budgetId);
 
     }
 
     function budgets() {
-      function put(budget) {
-        return db.put(budget.toJSON()).then(res => {
+      function put(budget: any) {
+        return db.put(budget.toJSON()).then((res: any) => {
           budget._rev = res.rev;
         });
       }
 
-      function get(id) {
-        return db.get(`${Budget.prefix}${id}`).then(b => {
+      function get(id: any) {
+        return db.get(`${Budget.prefix}${id}`).then((b: any) => {
           const budget = new Budget(b);
           budget.subscribe(put);
 
@@ -154,7 +156,7 @@ angular.module('financier').provider('db', function () {
           include_docs: true, /* eslint camelcase:0 */
           startkey: Budget.startKey,
           endkey: Budget.endKey
-        }).then(res => {
+        }).then((res: any) => {
           const budgets = [];
           for (let i = 0; i < res.rows.length; i++) {
             const budget = new Budget(res.rows[i].doc);
@@ -175,14 +177,14 @@ angular.module('financier').provider('db', function () {
     }
 
     function budgetsOpened() {
-      function put(budgetOpened) {
-        return db.put(budgetOpened.toJSON()).then(res => {
+      function put(budgetOpened: any) {
+        return db.put(budgetOpened.toJSON()).then((res: any) => {
           budgetOpened._rev = res.rev;
         });
       }
 
-      function get(id) {
-        return db.get(`${BudgetOpened.prefix}${id}`).then(b => {
+      function get(id: any) {
+        return db.get(`${BudgetOpened.prefix}${id}`).then((b: any) => {
           const budgetOpened = new BudgetOpened(b);
           budgetOpened.subscribe(put);
 
@@ -195,13 +197,14 @@ angular.module('financier').provider('db', function () {
           include_docs: true, /* eslint camelcase:0 */
           startkey: BudgetOpened.startKey,
           endkey: BudgetOpened.endKey
-        }).then(res => {
+        }).then((res: any) => {
           const budgetsOpened = {};
 
           for (let i = 0; i < res.rows.length; i++) {
             const budgetOpened = new BudgetOpened(res.rows[i].doc);
             budgetOpened.subscribe(put);
 
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             budgetsOpened[budgetOpened.id] = budgetOpened;
           }
 

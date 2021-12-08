@@ -8,6 +8,7 @@ angular.module('financier').directive('scrollIntoViewIf', () => {
     scope: false,
     require: '^scrollContainer',
     link: (scope, element, attributes, scrollContainerCtrl) => {
+      // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
       const container = scrollContainerCtrl.element;
 
       scope.$watch(() => {
@@ -21,14 +22,17 @@ angular.module('financier').directive('scrollIntoViewIf', () => {
 
       function takeIntoView() {
         // Cancel existing scroll animation
+        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         scrollContainerCtrl.scroller && scrollContainerCtrl.scroller.cancel();
 
         if (element[0].offsetTop < container.scrollTop) {
           // Out of view above (needs to scroll up)
+          // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
           scrollContainerCtrl.scroller = scrollTo(container, element[0].offsetTop, SCROLL_SPEED);
 
         } else if (element[0].offsetTop + element[0].offsetHeight > container.scrollTop + container.offsetHeight) {
           // Out of view below (needs to scroll down)
+          // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
           scrollContainerCtrl.scroller = scrollTo(
             container,
             element[0].offsetTop + element[0].offsetHeight - container.offsetHeight,
@@ -43,7 +47,7 @@ angular.module('financier').directive('scrollIntoViewIf', () => {
 // helper functions from:
 // https://stackoverflow.com/questions/8917921/cross-browser-javascript-not-jquery-scroll-to-top-animation
 
-function scrollTo(element, to, duration) {
+function scrollTo(element: any, to: any, duration: any) {
   var start = element.scrollTop,
       change = to - start,
       currentTime = 0,
@@ -75,7 +79,7 @@ function scrollTo(element, to, duration) {
 //b = start value
 //c = change in value
 //d = duration
-function easeInOutQuad(t, b, c, d) {
+function easeInOutQuad(t: any, b: any, c: any, d: any) {
   t /= d / 2;
   if (t < 1) {
     return c / 2 * t * t + b;

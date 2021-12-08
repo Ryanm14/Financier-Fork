@@ -9,6 +9,7 @@ angular.module('financier').directive('transactionSelect', function () {
 
             element.bind('change', function () {
                 scope.$apply(function () {
+                    // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
                     ctrl.select(scope.transaction, 'multiple');
                 });
             });

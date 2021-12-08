@@ -1,6 +1,24 @@
 import moment from 'moment';
 
-var fapp = angular.module('financier').controller('accountCtrl', function ($translate, $timeout, $document, $element, $scope, $rootScope, $stateParams, data, transaction, payee, myBudget, budgetRecord, Hotkeys, $filter, clipboard) {
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
+var fapp = angular.module('financier').controller('accountCtrl', function(
+  this: any,
+  $translate,
+  $timeout,
+  $document,
+  $element,
+  $scope,
+  $rootScope,
+  $stateParams,
+  data,
+  transaction,
+  payee,
+  myBudget,
+  budgetRecord,
+  Hotkeys,
+  $filter,
+  clipboard
+) {
   const that = this;
 
   const Transaction = transaction($stateParams.budgetId);
@@ -54,7 +72,7 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
     $scope.transactions = manager.allAccounts.transactions;
   }
 
-  this.openSplit = (trans, $event) => {
+  this.openSplit = (trans: any, $event: any) => {
     $event.stopPropagation();
 
     trans.splitOpen = !trans.splitOpen;
@@ -64,7 +82,7 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
     $rootScope.$broadcast('vsRepeatTrigger');
   };
 
-  this.transactionNeedsCategory = trans => {
+  this.transactionNeedsCategory = (trans: any) => {
     if (trans) {
       const tranAcc = manager.getAccount(trans.account);
 
@@ -86,7 +104,7 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
   };
 
   // Sort the default order to prevent initial page flash
-  $scope.transactions.sort((a, b) => {
+  $scope.transactions.sort((a: any, b: any) => {
     // TODO this sort isn't perfect -- equal dates/values will jump in order
     // Should make order determinable based off persisted UUID or something.
     return (b.date.getTime() + b.value) - (a.date.getTime() + a.value);
@@ -150,10 +168,11 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
       this.newTransaction = new Transaction({
         account: this.accountId || null
       });
+      // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
       this.newTransaction.date = oldTransaction ? angular.copy(oldTransaction.date) : new Date();
 
-      this.newTransaction.addTransaction = t => this.manager.addTransaction(t);
-      this.newTransaction.removeTransaction = t => this.manager.removeTransaction(t);
+      this.newTransaction.addTransaction = (t: any) => this.manager.addTransaction(t);
+      this.newTransaction.removeTransaction = (t: any) => this.manager.removeTransaction(t);
 
       $timeout(() => {
         if (this.accountId) {
@@ -180,7 +199,7 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
     this.createTransaction();
   });
 
-  this.setCleared = (event, trans) => {
+  this.setCleared = (event: any, trans: any) => {
     $scope.dbCtrl.stopPropagation(event);
 
     let cleared = trans.cleared;
@@ -197,7 +216,7 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
 
   this.toggleCleared = () => {
     // Determine what the majority of selected transactions are
-    const amountCleared = that.selectedTransactions.reduce((count, t) => {
+    const amountCleared = that.selectedTransactions.reduce((count: any, t: any) => {
       return count + (t.cleared ? 1 : 0);
     }, 0);
 
@@ -221,6 +240,7 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
 
     //selected Balance logic
     sum = 0;
+    // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
     angular.forEach(this.selectedTransactions, function (item) { 
      var outFlowIntCurrency = $filter('intCurrency')(item.outflow, true, 2);
      var inFlowIntCurrency = $filter('intCurrency')(item.inflow, true, 2);               
@@ -232,7 +252,8 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
 
   $scope.tempdata = [];
 
-  this.isAllSelected = val => {   
+  this.isAllSelected = (val: any) => {   
+    // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
     if (angular.isDefined(val)) {
       if (val) {        
         this.selectAll();
@@ -264,7 +285,7 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
   });
   const hotkeys = Hotkeys.createHotkey({
       key: selectAllKeyCombos,
-      callback: event => {
+      callback: (event: any) => {
         if (event.target.tagName === 'INPUT') {
           return;
         }
@@ -285,8 +306,9 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
     Hotkeys.deregisterHotkey(hotkeys);
   });
 
-  this.copyToClipboard = (input)  => {
+  this.copyToClipboard = (input: any) => {
     var text = "";
+    // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
     angular.forEach(input, function (item) {             
                 var i = '';              
                 if (item.transfer && item.transfer.account) {
@@ -321,7 +343,7 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
     }
   };
 
-  this.selectRow = function (event, rowIndex) {     
+  this.selectRow = function (event: any, rowIndex: any) {     
       console.log( "selectRow");
     
       $scope.displayedTransactions = $filter('searchFromTransactions')($scope.displayedTransactions, $scope.search);
@@ -339,7 +361,7 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
       return;
     }
 
-    that.selectedTransactionIndexes = that.selectedTransactions.map(trans => {
+    that.selectedTransactionIndexes = that.selectedTransactions.map((trans: any) => {
       for (let i = 0; i < $scope.displayedTransactions.length; i++) {
         if (trans === $scope.displayedTransactions[i]) {
           return i;
@@ -373,10 +395,11 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
       }
     }
 
-    that.selectedTransactions = that.selectedTransactionIndexes.map(i => $scope.displayedTransactions[i]);
+    that.selectedTransactions = that.selectedTransactionIndexes.map((i: any) => $scope.displayedTransactions[i]);
 
      //selected Balance logic
     sum = 0;
+    // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
     angular.forEach(this.selectedTransactions, function (item) { 
      var outFlowIntCurrency = $filter('intCurrency')(item.outflow, true, 2);
      var inFlowIntCurrency = $filter('intCurrency')(item.inflow, true, 2);               
@@ -388,7 +411,8 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
     $rootScope.$broadcast('vsRepeatTrigger');
   };
 
-  function getFocusName(el) {
+  // @ts-expect-error ts-migrate(7023) FIXME: 'getFocusName' implicitly has return type 'any' be... Remove this comment to see the full error message
+  function getFocusName(el: any) {
     if (!el || !el.getAttribute) {
       return '';
     }
@@ -402,15 +426,15 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
     return getFocusName(el.parentNode);
   }
 
-  this.isTransactionSelected = function (trans) {
+  this.isTransactionSelected = function (trans: any) {
     return that.selectedTransactions.indexOf(trans) > -1;
   };
 
-  function isRowSelected(index) {
+  function isRowSelected(index: any) {
     return that.selectedTransactionIndexes.indexOf(index) > -1;
   }
 
-  function selectWithShift(rowIndex) {
+  function selectWithShift(rowIndex: any) {
     var lastSelectedRowIndexInSelectedRowsList = that.selectedTransactionIndexes.length - 1;
     var lastSelectedRowIndex = that.selectedTransactionIndexes[lastSelectedRowIndexInSelectedRowsList];
     var selectFromIndex = Math.min(rowIndex, lastSelectedRowIndex);
@@ -419,14 +443,14 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
 
   }
 
-  function selectRows(selectFromIndex, selectToIndex) {
+  function selectRows(selectFromIndex: any, selectToIndex: any) {
 
     for (var rowToSelect = selectFromIndex; rowToSelect <= selectToIndex; rowToSelect++) {
       select(rowToSelect);
     }
   }  
 
-  function changeSelectionStatus(rowIndex) {   
+  function changeSelectionStatus(rowIndex: any) {   
     var outFlowIntCurrency = $filter('intCurrency')($scope.displayedTransactions[rowIndex].outflow, true, 2);
     var inFlowIntCurrency = $filter('intCurrency')($scope.displayedTransactions[rowIndex].inflow, true, 2);     
     
@@ -442,24 +466,24 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
     $rootScope.selectedBalance = $filter('currency')(sum, '$', 2);
   }
 
-  function select(rowIndex) {
+  function select(rowIndex: any) {
     if (!isRowSelected(rowIndex)) {
         that.selectedTransactionIndexes.push(rowIndex);
     }
   }
 
-  function unselect(rowIndex) {
+  function unselect(rowIndex: any) {
     var rowIndexInSelectedRowsList = that.selectedTransactionIndexes.indexOf(rowIndex);
     var unselectOnlyOneRow = 1;
     that.selectedTransactionIndexes.splice(rowIndexInSelectedRowsList, unselectOnlyOneRow);
   }
 
-  function isValidDate(dateString) {
+  function isValidDate(dateString: any) {
     var regEx = /^\d{4}-\d{2}-\d{2}$/;
     return dateString.match(regEx) != null;
   }
 
-  this.toggle = (index, event) => {
+  this.toggle = (index: any, event: any) => {
     $scope.dbCtrl.stopPropagation(event);
 
     // Cannot select anything when adding a new transaction
@@ -467,7 +491,7 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
       return;
     }
 
-    that.selectedTransactionIndexes = that.selectedTransactions.map(trans => {
+    that.selectedTransactionIndexes = that.selectedTransactions.map((trans: any) => {
       for (let i = 0; i < $scope.displayedTransactions.length; i++) {
         if (trans === $scope.displayedTransactions[i]) {
           return i;
@@ -477,11 +501,12 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
 
     changeSelectionStatus(index);
 
-    that.selectedTransactions = that.selectedTransactionIndexes.map(i => $scope.displayedTransactions[i]);
+    that.selectedTransactions = that.selectedTransactionIndexes.map((i: any) => $scope.displayedTransactions[i]);
   };
 
-  that.selectGetterSetter = trans => {
-    return val => {
+  that.selectGetterSetter = (trans: any) => {
+    return (val: any) => {
+      // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
       if (angular.isUndefined(val)) {
         return that.isTransactionSelected(trans);
       }
@@ -506,11 +531,12 @@ var fapp = angular.module('financier').controller('accountCtrl', function ($tran
 
 
 //this searches transactions
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
 angular.module('financier').filter('searchFromTransactions', function($rootScope, $filter) {
 
     //input is the entire set of rows
     //search is the phrase
-    return function (input, search) {
+    return function (input: any, search: any) {
       
      if( typeof search == 'undefined' ) {
        console.log( "no search input");
@@ -518,7 +544,7 @@ angular.module('financier').filter('searchFromTransactions', function($rootScope
      }
       console.log( "search transactions: " + search );
       
-        var output = [];
+        var output: any = [];
         var sumBalance = 0;
        
         //if you search once, this path gets taken
@@ -537,6 +563,7 @@ angular.module('financier').filter('searchFromTransactions', function($rootScope
         } else {            
             //input = $rootScope.all; 
 
+            // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
             angular.forEach(input, function (item) {             
                 var i = '';
                 if (item.transfer && item.transfer.account) {
@@ -549,13 +576,17 @@ angular.module('financier').filter('searchFromTransactions', function($rootScope
                 
                 var inflow = " ";
                 if( typeof item.inflow != 'undefined') {
+                  // @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'string'.
                   inflow = parseInt(item.inflow || "");  
+                  // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'true' since the... Remove this comment to see the full error message
                   inflow = inflow != NaN ?  $filter('intCurrency')(inflow, true, 2) : " ";
                 }
 
                 var outflow = " ";
                 if( typeof item.outflow != 'undefined') {
+                  // @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'string'.
                   outflow = parseInt(item.outflow || "");  
+                  // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'true' since the... Remove this comment to see the full error message
                   outflow = outflow != NaN ?  $filter('intCurrency')(outflow, true, 2) : " ";
                 }               
                 
@@ -591,13 +622,14 @@ angular.module('financier').filter('searchFromTransactions', function($rootScope
         
         
         return output;
-    }
+    };
 })
 
 //searches by start and end date
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
 angular.module('financier').filter('searchByDateStartEnd', function($rootScope, $filter) {
     console.log( "search by date start end");
-    return function (input, dateStart, dateEnd) {   
+    return function (input: any, dateStart: any, dateEnd: any) {   
    
       if( typeof dateStart == 'undefined' ) {        
         return input;
@@ -619,6 +651,7 @@ angular.module('financier').filter('searchByDateStartEnd', function($rootScope, 
           console.log( "date ranges are not valid");
             output = input;
         } else {
+            // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
             angular.forEach(input, function (item) {
                 var i = '';
                 if (item._data.date >= dateStart && item._data.date <= dateEnd) {
@@ -647,5 +680,5 @@ angular.module('financier').filter('searchByDateStartEnd', function($rootScope, 
         $rootScope.sumBalance = currency;
         
         return output;
-    }
+    };
 })

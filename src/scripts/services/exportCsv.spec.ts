@@ -1,26 +1,37 @@
+// @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'describe'. Do you need to instal... Remove this comment to see the full error message
 describe('exportCsv', function () {
-  let exportCsv, transaction, Transaction;
+  let exportCsv: any, transaction, Transaction: any;
 
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'beforeEach'.
   beforeEach(angular.mock.module('financier'));
 
-  beforeEach(inject((_exportCsv_, _transaction_) => {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'beforeEach'.
+  beforeEach(inject((_exportCsv_: any, _transaction_: any) => {
     exportCsv = _exportCsv_;
     transaction = _transaction_;
     Transaction = transaction('123-123-123-123');
   }));
 
+  // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'describe'. Do you need to instal... Remove this comment to see the full error message
   describe('getFlagColor', () => {
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('works with unset', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._getFlagColor()).toBeUndefined();
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('works with red', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._getFlagColor('#ff0000')).toBe('Red');
     });
   });
 
+  // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'describe'. Do you need to instal... Remove this comment to see the full error message
   describe('_buildTransactionsCsv', () => {
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('works with no transactions', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: []
       })).toEqual(
@@ -29,7 +40,9 @@ describe('exportCsv', function () {
       );
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('works with one transaction', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: [
           new Transaction({
@@ -42,7 +55,9 @@ describe('exportCsv', function () {
       );
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('works with cleared transaction', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: [
           new Transaction({
@@ -56,7 +71,9 @@ describe('exportCsv', function () {
       );
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('works with reconciled transaction', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: [
           new Transaction({
@@ -71,7 +88,9 @@ describe('exportCsv', function () {
       );
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('formats numbers properly', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: [
           new Transaction({
@@ -88,7 +107,9 @@ describe('exportCsv', function () {
       );
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('gets flag color', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: [
           new Transaction({
@@ -101,7 +122,9 @@ describe('exportCsv', function () {
       );
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('looks up account name', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: [
           new Transaction({
@@ -118,7 +141,9 @@ Test account,,,,,,,,$0.00,$0.00,Uncleared`
       );
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('formats date', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: [
           new Transaction({
@@ -131,7 +156,9 @@ Test account,,,,,,,,$0.00,$0.00,Uncleared`
       );
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('formats payee', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: [
           new Transaction({
@@ -149,7 +176,9 @@ Test account,,,,,,,,$0.00,$0.00,Uncleared`
       );
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('sets memo', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: [
           new Transaction({
@@ -162,7 +191,9 @@ Test account,,,,,,,,$0.00,$0.00,Uncleared`
       );
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('sets memo', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(exportCsv._buildTransactionsCsv({
         transactions: [
           new Transaction({

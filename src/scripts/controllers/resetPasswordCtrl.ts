@@ -1,4 +1,4 @@
-angular.module('financier').controller('resetPasswordCtrl', function (User, $state, $stateParams, $rootScope) {
+angular.module('financier').controller('resetPasswordCtrl', function(this: any, User, $state, $stateParams, $rootScope) {
   this.goSignin = () => {
     $state.go('user.budget')
     .then(() => {
@@ -13,7 +13,7 @@ angular.module('financier').controller('resetPasswordCtrl', function (User, $sta
     .then(() => {
       this.success = true;
     })
-    .catch(e => {
+    .catch((e: any) => {
       if (e.status === 429) {
         this.error = 'TOO_MANY_ATTEMPTS';
       } else {

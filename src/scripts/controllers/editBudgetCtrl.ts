@@ -1,4 +1,4 @@
-angular.module('financier').controller('editBudgetCtrl', function (currencies, $scope, budgetRecord) {
+angular.module('financier').controller('editBudgetCtrl', function(this: any, currencies, $scope, budgetRecord) {
   this.name = budgetRecord.name;
   this.currency = budgetRecord.currency;
 

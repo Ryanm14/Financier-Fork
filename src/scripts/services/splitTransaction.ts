@@ -1,12 +1,25 @@
 import moment from 'moment';
 
-angular.module('financier').factory('splitTransaction', uuid => {
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
+angular.module('financier').factory('splitTransaction', (uuid: any) => {
   return () => {
 
     /**
      * Represents a Transaction
      */
     class SplitTransaction {
+      _data: any;
+      _month: any;
+      _transfer: any;
+      id: any;
+      subscribeCategoryChangeAfterFn: any;
+      subscribeCategoryChangeBeforeFn: any;
+      subscribeClearedValueChangeFn: any;
+      subscribeMonthChangeFn: any;
+      subscribePayeeChangeFn: any;
+      subscribeUnclearedValueChangeFn: any;
+      subscribeValueChangeFn: any;
+      transaction: any;
 
       /**
        * Create a Transaction.
@@ -14,7 +27,8 @@ angular.module('financier').factory('splitTransaction', uuid => {
        * @param {object} [data] - The object record from the database.
        * @param {Transaction} transaction - The transaction that the split belongs to
        */
-      constructor(transaction, data) {
+      constructor(transaction: any, data: any) {
+        // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
         const myData = angular.merge({
           id: uuid(),
           value: 0,
@@ -136,6 +150,7 @@ angular.module('financier').factory('splitTransaction', uuid => {
       }
 
       set outflow(v) {
+        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         this.value = -v;
       }
 
@@ -224,7 +239,7 @@ angular.module('financier').factory('splitTransaction', uuid => {
         this._data = data;
       }
 
-      _setDate(x) {
+      _setDate(x: any) {
         const splitOldMonth = this.month;
         this.transaction._setDate(x);
         this.setMonth();
@@ -232,7 +247,7 @@ angular.module('financier').factory('splitTransaction', uuid => {
 
       }
 
-      _setDateFromParent(x) {
+      _setDateFromParent(x: any) {
         const oldMonth = this._month;
         this.setMonth();
         this._emitMonthChange(this.month, oldMonth);
@@ -248,7 +263,7 @@ angular.module('financier').factory('splitTransaction', uuid => {
        * @param {function} fn - This function will be invoked upon record
        * changes with the Transaction object as the first parameter.
       */
-      subscribe(fn) {
+      subscribe(fn: any) {
         this.fn = fn;
       }
 
@@ -260,11 +275,11 @@ angular.module('financier').factory('splitTransaction', uuid => {
         return this.transaction.fn;
       }
 
-      subscribeMonthChange(fn) {
+      subscribeMonthChange(fn: any) {
         this.subscribeMonthChangeFn = fn;
       }
 
-      _emitMonthChange(newMonth, oldMonth) {
+      _emitMonthChange(newMonth: any, oldMonth: any) {
         this.subscribeMonthChangeFn && this.subscribeMonthChangeFn(newMonth, oldMonth);
       }
 
@@ -277,16 +292,16 @@ angular.module('financier').factory('splitTransaction', uuid => {
        * @param {function} fn - This function will be invoked upon value
        * changes with the amount the value has changed as the first parameter.
       */
-      subscribeValueChange(fn) {
+      subscribeValueChange(fn: any) {
         this.subscribeValueChangeFn = fn;
       }
 
-      subscribeCategoryChange(beforeFn, afterFn) {
+      subscribeCategoryChange(beforeFn: any, afterFn: any) {
         this.subscribeCategoryChangeBeforeFn = beforeFn;
         this.subscribeCategoryChangeAfterFn = afterFn;
       }
 
-      _emitCategoryChange(fn) {
+      _emitCategoryChange(fn: any) {
         this.subscribeCategoryChangeBeforeFn && this.subscribeCategoryChangeBeforeFn();
         fn();
         this.subscribeCategoryChangeAfterFn && this.subscribeCategoryChangeAfterFn();
@@ -299,7 +314,7 @@ angular.module('financier').factory('splitTransaction', uuid => {
        * changes with the amount the value has changed as the first parameter,
        * but only when/if the value is uncleared.
       */
-      subscribePayeeChange(fn) {
+      subscribePayeeChange(fn: any) {
         this.subscribePayeeChangeFn = fn;
       }
 
@@ -314,7 +329,7 @@ angular.module('financier').factory('splitTransaction', uuid => {
        *
        * @private
       */
-      _emitPayeeChange(newPayee, oldPayee) {
+      _emitPayeeChange(newPayee: any, oldPayee: any) {
         return this.subscribePayeeChangeFn && this.subscribePayeeChangeFn(newPayee, oldPayee);
       }
 
@@ -324,7 +339,7 @@ angular.module('financier').factory('splitTransaction', uuid => {
        *
        * @private
       */
-      _emitValueChange(val) {
+      _emitValueChange(val: any) {
         return this.subscribeValueChangeFn && this.subscribeValueChangeFn(val);
       }
 
@@ -334,7 +349,7 @@ angular.module('financier').factory('splitTransaction', uuid => {
        *
        * @private
       */
-      _emitClearedValueChange(val) {
+      _emitClearedValueChange(val: any) {
         for (let i = 0; i < this.subscribeClearedValueChangeFn.length; i++) {
           this.subscribeClearedValueChangeFn[i](val);
         }
@@ -346,7 +361,7 @@ angular.module('financier').factory('splitTransaction', uuid => {
        *
        * @private
       */
-      _emitUnclearedValueChange(val) {
+      _emitUnclearedValueChange(val: any) {
         for (let i = 0; i < this.subscribeUnclearedValueChangeFn.length; i++) {
           this.subscribeUnclearedValueChangeFn[i](val);
         }

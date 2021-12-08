@@ -17,7 +17,7 @@ angular.module('financier').directive('creditCardExpirationSpaces', () => {
           }
         }
       });
-      element.on('input', function () {
+      element.on('input', function(this: any) {
         var newValue = this.value.split(' / ').join('');
 
         if (newValue.length > 0 && newValue.length <= 4) {
@@ -30,6 +30,7 @@ angular.module('financier').directive('creditCardExpirationSpaces', () => {
           validate(element.val());
         }
 
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'creditCardExpirationSpaces' does not exi... Remove this comment to see the full error message
         scope.creditCardExpirationSpaces = this.value;
       });
 
@@ -39,15 +40,18 @@ angular.module('financier').directive('creditCardExpirationSpaces', () => {
         validate(element.val() || 'invalid');
       });
 
-      function validate(value) {
+      function validate(value: any) {
         // If we don't have Stripe global, just don't use the stripe validator
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Stripe'.
         if (!value.length || (Stripe && Stripe.card.validateExpiry(value))) {
           element.addClass('credit-card__expiry--valid');
           element.removeClass('ng-invalid credit-card__expiry--invalid');
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'expirationInvalid' does not exist on typ... Remove this comment to see the full error message
           scope.expirationInvalid = false;
         } else {
           element.addClass('ng-invalid credit-card__expiry--invalid');
           element.removeClass('credit-card__expiry--valid');
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'expirationInvalid' does not exist on typ... Remove this comment to see the full error message
           scope.expirationInvalid = true;
         }
       }

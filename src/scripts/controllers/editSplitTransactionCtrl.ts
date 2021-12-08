@@ -1,6 +1,6 @@
-angular.module('financier').controller('editSplitTransactionCtrl', function ($scope) {
+angular.module('financier').controller('editSplitTransactionCtrl', function(this: any, $scope) {
   $scope.$watchCollection(() => {
-    const amount = ($scope.transactionCtrl.value.value || 0) - $scope.transactionCtrl.splits.reduce((prev, current) => {
+    const amount = ($scope.transactionCtrl.value.value || 0) - $scope.transactionCtrl.splits.reduce((prev: any, current: any) => {
       return prev + (current.value.value || 0);
     }, 0);
 
@@ -13,6 +13,7 @@ angular.module('financier').controller('editSplitTransactionCtrl', function ($sc
     }
 
     return [inflow, outflow];
+  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'inflow' implicitly has an 'any' t... Remove this comment to see the full error message
   }, ([inflow, outflow]) => {
     this.inflow = inflow;
     this.outflow = outflow;

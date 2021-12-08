@@ -1,10 +1,22 @@
-angular.module('financier').controller('budgetCtrl', function ($filter, $stateParams, $rootScope, $timeout, $scope, month, masterCategory, category, myBudget, ngDialog) {
+angular.module('financier').controller('budgetCtrl', function(
+  this: any,
+  $filter,
+  $stateParams,
+  $rootScope,
+  $timeout,
+  $scope,
+  month,
+  masterCategory,
+  category,
+  myBudget,
+  ngDialog
+) {
   const Month = month($stateParams.budgetId);
   const MasterCategory = masterCategory($stateParams.budgetId);
   const Category = category($stateParams.budgetId);
 
   this.showMonths = 0;
-  $rootScope.$on('budget:columns', (event, months) => {
+  $rootScope.$on('budget:columns', (event: any, months: any) => {
     this.showMonths = (months >= 5 ? 5 : months) || 1;
   });
 
@@ -19,7 +31,7 @@ angular.module('financier').controller('budgetCtrl', function ($filter, $statePa
       }
     }
 
-    this.masterCategoriesArray.sort((a, b) => a.sort - b.sort);
+    this.masterCategoriesArray.sort((a: any, b: any) => a.sort - b.sort);
   };
 
   $scope.$on('masterCategories:change', updateCategories);
@@ -30,7 +42,7 @@ angular.module('financier').controller('budgetCtrl', function ($filter, $statePa
     animation: 200,
     group: 'categories',
     ghostClass: 'budget__month-row--ghost',
-    onSort: e => {
+    onSort: (e: any) => {
       // wait for the array to update
       $timeout(() => {
         for (let i = 0; i < e.models.length; i++) {
@@ -46,7 +58,7 @@ angular.module('financier').controller('budgetCtrl', function ($filter, $statePa
   $scope.masterCategorySortable = {
     animation: 200,
     ghostClass: 'budget__month-row--ghost',
-    onSort: e => {
+    onSort: (e: any) => {
       for (let i = 0; i < e.models.length; i++) {
         e.models[i].sort = i;
       }
@@ -62,19 +74,19 @@ angular.module('financier').controller('budgetCtrl', function ($filter, $statePa
     dateFilter = $filter('date');
 
   this.translationPayloads = {
-    currentMonth(date) {
+    currentMonth(date: any) {
       return {
         month: dateFilter(date, 'MMM')
       };
     },
-    lastMonth(date) {
+    lastMonth(date: any) {
       return {
         month: dateFilter(lastMonthFilter(date), 'MMM')
       };
     }
   };
 
-  this.addMasterCategory = name => {
+  this.addMasterCategory = (name: any) => {
     const cat = new MasterCategory({
       name
     });
@@ -91,7 +103,7 @@ angular.module('financier').controller('budgetCtrl', function ($filter, $statePa
     cat.subscribe(myBudget.masterCategories.put);
   };
 
-  this.addCategory = (name, masterCategory) => {
+  this.addCategory = (name: any, masterCategory: any) => {
     let sort = masterCategory.categories[masterCategory.categories.length - 1] ?
                masterCategory.categories[masterCategory.categories.length - 1].sort + 1 :
                0;
@@ -109,7 +121,7 @@ angular.module('financier').controller('budgetCtrl', function ($filter, $statePa
     cat.subscribe(myBudget.categories.put);
   };
 
-  this.removeCategory = id => {
+  this.removeCategory = (id: any) => {
     removeConfirm($scope.dbCtrl.categories[id].name)
     .then(() => {
       return remove();
@@ -120,7 +132,7 @@ angular.module('financier').controller('budgetCtrl', function ($filter, $statePa
 
       $scope.dbCtrl.removeCategory(cat);
 
-      $scope.dbCtrl.manager.months.forEach(month => {
+      $scope.dbCtrl.manager.months.forEach((month: any) => {
         const monthCat = month.categories[id];
 
         if (monthCat) {
@@ -138,7 +150,7 @@ angular.module('financier').controller('budgetCtrl', function ($filter, $statePa
     }
   };
 
-  this.removeMasterCategory = masterCategory => {
+  this.removeMasterCategory = (masterCategory: any) => {
     removeConfirm(masterCategory.name)
     .then(() => {
       return remove();
@@ -147,10 +159,10 @@ angular.module('financier').controller('budgetCtrl', function ($filter, $statePa
     function remove() {
       const cats = masterCategory.categories.slice(0);
 
-      cats.forEach(cat => {
+      cats.forEach((cat: any) => {
         $scope.dbCtrl.removeCategory(cat);
 
-        $scope.dbCtrl.manager.months.forEach(month => {
+        $scope.dbCtrl.manager.months.forEach((month: any) => {
           const monthCat = month.categories[cat.id];
 
           if (monthCat) {
@@ -175,12 +187,13 @@ angular.module('financier').controller('budgetCtrl', function ($filter, $statePa
     }
   };
 
-  function removeConfirm(name) {
+  function removeConfirm(name: any) {
     const scope = $scope.$new({});
 
     scope.category = name;
 
     return ngDialog.openConfirm({
+      // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
       template: require('../../views/modal/removeCategory.html'),
       scope,
       className: 'ngdialog-theme-default ngdialog-theme-default--danger modal'

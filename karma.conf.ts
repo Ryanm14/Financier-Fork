@@ -1,5 +1,6 @@
 // Karma configuration
-module.exports = config => {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = (config: any) => {
   config.set({
     frameworks: [
       // Reference: https://github.com/karma-runner/karma-jasmine
@@ -23,6 +24,7 @@ module.exports = config => {
 
     // TODO: Using 2.0.6 karma-webpack due to bug:
     // https://github.com/webpack-contrib/karma-webpack/issues/291
+    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
     webpack: require('./webpack.config'),
 
     webpackMiddleware: {

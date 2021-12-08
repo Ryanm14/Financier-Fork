@@ -1,6 +1,6 @@
 // Lazy loading of Stripe.js
 
-angular.module('financier').factory('stripeLazyLoader', $q => {
+angular.module('financier').factory('stripeLazyLoader', ($q: any) => {
   var deferred = $q.defer();
 
   // Load Google map API script

@@ -1,21 +1,32 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'path'.
 const path = require('path');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const UglifyJs = require('uglifyjs-webpack-plugin');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const OfflinePlugin = require('offline-plugin');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const pJson = require('./package.json');
 
 /**
  * Env
  * Get npm lifecycle event to identify the environment
  */
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
 const ENV = process.env.npm_lifecycle_event;
 const isTest = ENV === 'test' || ENV === 'test-watch';
 const isProd = ENV === 'build';
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const webpack = require('webpack');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   entry: isTest ? null : {
     app: './src/scripts/app.js'
@@ -23,6 +34,7 @@ module.exports = {
 
   output: isTest ? {} : {
     // Absolute output directory
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__dirname'.
     path: __dirname + '/dist',
 
     // Output path from the view of the page
@@ -103,7 +115,7 @@ module.exports = {
     hints: 'warning', // enum
     maxAssetSize: 20000000, // int (in bytes),
     maxEntrypointSize: 40000000, // int (in bytes)
-    assetFilter: assetFilename => {
+    assetFilter: (assetFilename: any) => {
       // Function predicate that provides asset filenames
       return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
     }
@@ -122,6 +134,7 @@ module.exports = {
   // enhance debugging by adding meta info for the browser devtools
   // source-map most detailed at the expense of build speed.
 
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__dirname'.
   context: __dirname, // string (absolute path!)
   // the home directory for webpack
   // the entry and module.rules.loader option
@@ -138,6 +151,7 @@ module.exports = {
   // lets you precisely control what bundle information gets displayed
 
   devServer: {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__dirname'.
     contentBase: path.join(__dirname, 'src', 'public'), // boolean | string | array, static file location
     compress: true, // enable gzip compression
     historyApiFallback: true, // true for index.html upon 404, object for multiple paths
@@ -189,6 +203,7 @@ module.exports = {
         // Copy assets from the public folder
         // Reference: https://github.com/kevlened/copy-webpack-plugin
         new CopyWebpackPlugin([{
+          // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__dirname'.
           from: __dirname + '/src/public'
         }]),
 

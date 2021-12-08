@@ -4,6 +4,12 @@ angular.module('financier').factory('MonthCategory', () => {
    * Represents a MonthCategory (containing a budget cell for the intersection of a given month and category).
    */
   class MonthCategory {
+    _data: any;
+    budgetFn: any;
+    categoryId: any;
+    fn: any;
+    monthId: any;
+    overspendingFn: any;
 
     /**
      * Create a MonthCategory.
@@ -12,7 +18,7 @@ angular.module('financier').factory('MonthCategory', () => {
      *
      * @param {object} data - The record object from the database
      */
-    constructor(data) {
+    constructor(data: any) {
       if (!data || !data._id) {
         throw new Error(`
           Needs _id!
@@ -42,7 +48,7 @@ angular.module('financier').factory('MonthCategory', () => {
      * @returns {string} - A MonthCategory `_id`.
      * @private
      */
-    static _fromId(budgetId, monthId, categoryId) {
+    static _fromId(budgetId: any, monthId: any, categoryId: any) {
       return `${MonthCategory.prefix(budgetId)}${monthId}_${categoryId}`;
     }
 
@@ -62,7 +68,7 @@ angular.module('financier').factory('MonthCategory', () => {
      *
      * @returns {MonthCategory} - A new MonthCategory object.
      */
-    static from(budgetId, monthId, categoryId) {
+    static from(budgetId: any, monthId: any, categoryId: any) {
       return new MonthCategory({
         _id: MonthCategory._fromId(budgetId, monthId, categoryId)
       });
@@ -188,7 +194,7 @@ angular.module('financier').factory('MonthCategory', () => {
      *
      * @param {function}
      */
-    subscribe(fn) {
+    subscribe(fn: any) {
       this.fn = fn;
     }
 
@@ -210,7 +216,7 @@ angular.module('financier').factory('MonthCategory', () => {
      *
      * @param {function}
      */
-    subscribeBudget(fn) {
+    subscribeBudget(fn: any) {
       this.budgetFn = fn;
     }
 
@@ -241,7 +247,7 @@ angular.module('financier').factory('MonthCategory', () => {
      *
      * @param {function}
      */
-    subscribeOverspending(fn) {
+    subscribeOverspending(fn: any) {
       this.overspendingFn = fn;
     }
 
@@ -250,7 +256,7 @@ angular.module('financier').factory('MonthCategory', () => {
      *
      * @private
      */
-    _emitOverspendingChange(newOverspending, oldOverspending) {
+    _emitOverspendingChange(newOverspending: any, oldOverspending: any) {
       return this.overspendingFn && this.overspendingFn(newOverspending, oldOverspending);
     }
 
@@ -260,7 +266,7 @@ angular.module('financier').factory('MonthCategory', () => {
      * @param {currency} value - The budget change (newBudget - oldBudget).
      * @private
      */
-    _emitBudgetChange(value) {
+    _emitBudgetChange(value: any) {
       return this.budgetFn && this.budgetFn(value);
     }
 
@@ -281,7 +287,7 @@ angular.module('financier').factory('MonthCategory', () => {
      * @param {string} budgetId - The budget's ID
      * @returns {string} The start key
      */
-    static startKey(budgetId) {
+    static startKey(budgetId: any) {
       return `b_${budgetId}_m_category_`;
     }
 
@@ -292,7 +298,7 @@ angular.module('financier').factory('MonthCategory', () => {
      * @param {string} budgetId - The budget's ID
      * @returns {string} The end key
      */
-    static endKey(budgetId) {
+    static endKey(budgetId: any) {
       return this.startKey(budgetId) + '\uffff';
     }
 
@@ -302,7 +308,7 @@ angular.module('financier').factory('MonthCategory', () => {
      * @param {string} budgetId - The budget's ID
      * @returns {string} The prefix
      */
-    static prefix(budgetId) {
+    static prefix(budgetId: any) {
       return this.startKey(budgetId);
     }
 
@@ -315,7 +321,7 @@ angular.module('financier').factory('MonthCategory', () => {
      * @returns {boolean} True if document _id is in the budget
      * as a MonthCategory.
      */
-    static contains(budgetId, _id) {
+    static contains(budgetId: any, _id: any) {
       return _id > this.startKey(budgetId) && _id < this.endKey(budgetId);
     }
   }

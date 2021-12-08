@@ -1,16 +1,25 @@
-angular.module('financier').factory('account', uuid => {
-  return budgetId => {
+angular.module('financier').factory('account', (uuid: any) => {
+  return (budgetId: any) => {
     /**
      * Represents an account (credit card, checking, etc)
      */
     class Account {
+      _clearedValueChangeFn: any;
+      _transferClearedValueChangeFn: any;
+      _transferUnclearedValueChangeFn: any;
+      _unclearedValueChangeFn: any;
+      cache: any;
+      data: any;
+      fn: any;
+      id: any;
+      transactions: any;
       /**
        * Create an Account
        *
        * @param {object} [data] - The record object from the database
        * (with `_id` and `_rev`).
        */
-      constructor(data) {
+      constructor(data: any) {
         const myData = angular.extend({
           type: null,
           closed: false,
@@ -48,19 +57,19 @@ angular.module('financier').factory('account', uuid => {
           }
         };
 
-        this._clearedValueChangeFn = val => {
+        this._clearedValueChangeFn = (val: any) => {
           this._changeClearedBalance(val);
         };
 
-        this._unclearedValueChangeFn = val => {
+        this._unclearedValueChangeFn = (val: any) => {
           this._changeUnclearedBalance(val);
         };
 
-        this._transferClearedValueChangeFn = val => {
+        this._transferClearedValueChangeFn = (val: any) => {
           this._changeClearedBalance(-val);
         };
 
-        this._transferUnclearedValueChangeFn = val => {
+        this._transferUnclearedValueChangeFn = (val: any) => {
           this._changeUnclearedBalance(-val);
         };
       }
@@ -75,7 +84,7 @@ angular.module('financier').factory('account', uuid => {
        * @param {Transaction} trans The Transaction to add to the account balance, and
        * to subscribe to for future changes.
       */
-      addTransaction(trans) {
+      addTransaction(trans: any) {
         if (trans.constructorName === 'SplitTransaction') {
           return;
         }
@@ -98,7 +107,7 @@ angular.module('financier').factory('account', uuid => {
        * @param {Transaction} trans The Transaction to remove from the account balance, and
        * to unsubscribe from for future changes.
       */
-      removeTransaction(trans) {
+      removeTransaction(trans: any) {
         if (trans.constructorName === 'SplitTransaction') {
           return;
         }
@@ -125,7 +134,7 @@ angular.module('financier').factory('account', uuid => {
        * balance by.
        * @private
       */
-      _changeClearedBalance(val) {
+      _changeClearedBalance(val: any) {
         this.cache.clearedBalance += val;
       }
 
@@ -136,7 +145,7 @@ angular.module('financier').factory('account', uuid => {
        * balance by.
        * @private
       */
-      _changeUnclearedBalance(val) {
+      _changeUnclearedBalance(val: any) {
         this.cache.unclearedBalance += val;
       }
 
@@ -307,7 +316,7 @@ angular.module('financier').factory('account', uuid => {
        * @param {function} fn - This function will be invoked upon record
        * changes with the Account object as the first parameter.
       */
-      subscribe(fn) {
+      subscribe(fn: any) {
         this.fn = fn;
       }
 
@@ -365,7 +374,7 @@ angular.module('financier').factory('account', uuid => {
        * @returns {boolean} True if document _id is in the budget
        * as an account.
        */
-      static contains(_id) {
+      static contains(_id: any) {
         return _id > this.startKey && _id < this.endKey;
       }
     }

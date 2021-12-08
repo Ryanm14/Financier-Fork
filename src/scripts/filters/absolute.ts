@@ -1,3 +1,3 @@
 angular.module('financier').filter('absolute', () => {
-  return val => Math.abs(val);
+  return (val: any) => Math.abs(val);
 });

@@ -11,6 +11,7 @@ angular.module('financier').directive('outflowInput', $rootScope => {
           const input = element.find('input');
 
           scope.$on('transaction:outflow:focus', (e, { index } = {}) => {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'splitIndex' does not exist on type 'ISco... Remove this comment to see the full error message
             if (index === scope.$parent.splitIndex) {
               input[0].focus();
             }

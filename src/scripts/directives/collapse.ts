@@ -28,13 +28,15 @@ angular.module('financier').directive('collapse', function ($animate, $q, $parse
         if (!scope.$eval(attrs.collapse)) {
           element.addClass('in')
             .addClass('collapse')
+            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'true' is not assignable to param... Remove this comment to see the full error message
             .attr('aria-expanded', true)
+            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'false' is not assignable to para... Remove this comment to see the full error message
             .attr('aria-hidden', false)
             .css(css);
         }
       }
 
-      function getScrollFromElement(element) {
+      function getScrollFromElement(element: any) {
         if (horizontal) {
           return {width: element.scrollWidth + 'px'};
         }
@@ -50,7 +52,9 @@ angular.module('financier').directive('collapse', function ($animate, $q, $parse
           .then(function () {
             element.removeClass('collapse')
               .addClass('collapsing')
+              // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'true' is not assignable to param... Remove this comment to see the full error message
               .attr('aria-expanded', true)
+              // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'false' is not assignable to para... Remove this comment to see the full error message
               .attr('aria-hidden', false);
 
             if ($animateCss) {
@@ -91,6 +95,7 @@ angular.module('financier').directive('collapse', function ($animate, $q, $parse
             // IMPORTANT: The width must be set before adding "collapsing" class.
             // Otherwise, the browser attempts to animate from width 0 (in
             // collapsing class) to the given width here.
+              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
               .css(getScrollFromElement(element[0]))
               // initially all panel collapse have the collapse class, this removal
               // prevents the animation from jumping to collapsed state

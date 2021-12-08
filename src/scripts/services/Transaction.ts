@@ -1,7 +1,8 @@
 import moment from 'moment';
 
-angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
-  return budgetId => {
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
+angular.module('financier').factory('transaction', (uuid: any, splitTransaction: any) => {
+  return (budgetId: any) => {
 
     const SplitTransaction = splitTransaction(budgetId);
 
@@ -9,13 +10,31 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
      * Represents a Transaction
      */
     class Transaction {
+      _data: any;
+      _date: any;
+      _month: any;
+      _splits: any;
+      _transfer: any;
+      addTransaction: any;
+      fn: any;
+      id: any;
+      removeTransaction: any;
+      subscribeAccountChangeFn: any;
+      subscribeCategoryChangeAfterFn: any;
+      subscribeCategoryChangeBeforeFn: any;
+      subscribeClearedValueChangeFn: any;
+      subscribeMonthChangeFn: any;
+      subscribePayeeChangeFn: any;
+      subscribeUnclearedValueChangeFn: any;
+      subscribeValueChangeFn: any;
 
       /**
        * Create a Transaction.
        *
        * @param {object} [data] - The object record from the database.
        */
-      constructor(data) {
+      constructor(data: any) {
+        // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
         const myData = angular.merge({
           _id: Transaction.prefix + uuid(),
           value: 0,
@@ -54,7 +73,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
 
         this.transfer = null;
 
-        this._splits = myData.splits.map(s => new SplitTransaction(this, s));
+        this._splits = myData.splits.map((s: any) => new SplitTransaction(this, s));
       }
 
       /**
@@ -133,11 +152,11 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
         }
       }
 
-      addSplit(split) {
+      addSplit(split: any) {
         this._splits.push(split);
       }
 
-      removeSplit(split) {
+      removeSplit(split: any) {
         const index = this._splits.indexOf(split);
 
         if (index !== -1) {
@@ -172,6 +191,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
       }
 
       set outflow(v) {
+        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         this.value = -v;
       }
 
@@ -202,12 +222,12 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
           this.transfer._setDate(x);
         }
 
-        this.splits.forEach(s => {
+        this.splits.forEach((s: any) => {
           s._setDateFromParent(x);
         });
       }
 
-      _setDate(x) {
+      _setDate(x: any) {
         this._data.date = moment(x).format('YYYY-MM-DD');
         const oldDate = this.month;
         this._date = x;
@@ -395,7 +415,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
       }
 
       set data(data) {
-        this.splits = data.splits.map(s => new SplitTransaction(this, s));
+        this.splits = data.splits.map((s: any) => new SplitTransaction(this, s));
 
         // SET CATEGORY
         this._emitCategoryChange(() => {
@@ -453,7 +473,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
         return this._data._id;
       }
 
-      set _rev(r) {
+      set _rev(r: any) {
         this.data._rev = r;
       }
 
@@ -463,7 +483,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        * @param {function} fn - This function will be invoked upon record
        * changes with the Transaction object as the first parameter.
       */
-      subscribe(fn) {
+      subscribe(fn: any) {
         this.fn = fn;
       }
 
@@ -476,32 +496,32 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        * @param {function} fn - This function will be invoked upon value
        * changes with the amount the value has changed as the first parameter.
       */
-      subscribeValueChange(fn) {
+      subscribeValueChange(fn: any) {
         this.subscribeValueChangeFn = fn;
       }
 
-      subscribeAccountChange(fn) {
+      subscribeAccountChange(fn: any) {
         this.subscribeAccountChangeFn = fn;
       }
 
-      _emitAccountChange(newAccount, oldAccount) {
+      _emitAccountChange(newAccount: any, oldAccount: any) {
         this.subscribeAccountChangeFn && this.subscribeAccountChangeFn(newAccount, oldAccount);
       }
 
-      subscribeMonthChange(fn) {
+      subscribeMonthChange(fn: any) {
         this.subscribeMonthChangeFn = fn;
       }
 
-      _emitMonthChange(newMonth, oldMonth) {
+      _emitMonthChange(newMonth: any, oldMonth: any) {
         this.subscribeMonthChangeFn && this.subscribeMonthChangeFn(newMonth, oldMonth);
       }
 
-      subscribeCategoryChange(beforeFn, afterFn) {
+      subscribeCategoryChange(beforeFn: any, afterFn: any) {
         this.subscribeCategoryChangeBeforeFn = beforeFn;
         this.subscribeCategoryChangeAfterFn = afterFn;
       }
 
-      _emitCategoryChange(fn) {
+      _emitCategoryChange(fn: any) {
         this.subscribeCategoryChangeBeforeFn && this.subscribeCategoryChangeBeforeFn();
         fn();
         this.subscribeCategoryChangeAfterFn && this.subscribeCategoryChangeAfterFn();
@@ -514,7 +534,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        * changes with the amount the value has changed as the first parameter,
        * but only when/if the value is cleared.
       */
-      subscribeClearedValueChange(fn) {
+      subscribeClearedValueChange(fn: any) {
         this.subscribeClearedValueChangeFn.push(fn);
       }
 
@@ -524,12 +544,13 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        * @param {function} fn - The function reference originally provided
        * to subscribeClearedValueChange.
       */
-      unsubscribeClearedValueChange(fn) {
+      unsubscribeClearedValueChange(fn: any) {
         const index = this.subscribeClearedValueChangeFn.indexOf(fn);
 
         if (index > -1) {
           this.subscribeClearedValueChangeFn.splice(index, 1);
         } else {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 0-1 arguments, but got 2.
           throw new Error('Subscriber does not exist', fn);
         }
       }
@@ -540,12 +561,13 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        * @param {function} fn - The function reference originally provided
        * to subscribeUnclearedValueChange.
       */
-      unsubscribeUnclearedValueChange(fn) {
+      unsubscribeUnclearedValueChange(fn: any) {
         const index = this.subscribeUnclearedValueChangeFn.indexOf(fn);
 
         if (index > -1) {
           this.subscribeUnclearedValueChangeFn.splice(index, 1);
         } else {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 0-1 arguments, but got 2.
           throw new Error('Subscriber does not exist', fn);
         }
       }
@@ -557,7 +579,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        * changes with the amount the value has changed as the first parameter,
        * but only when/if the value is uncleared.
       */
-      subscribeUnclearedValueChange(fn) {
+      subscribeUnclearedValueChange(fn: any) {
         this.subscribeUnclearedValueChangeFn.push(fn);
       }
 
@@ -568,7 +590,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        * changes with the amount the value has changed as the first parameter,
        * but only when/if the value is uncleared.
       */
-      subscribePayeeChange(fn) {
+      subscribePayeeChange(fn: any) {
         this.subscribePayeeChangeFn = fn;
       }
 
@@ -578,7 +600,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        *
        * @private
       */
-      _emitPayeeChange(newPayee, oldPayee) {
+      _emitPayeeChange(newPayee: any, oldPayee: any) {
         return this.subscribePayeeChangeFn && this.subscribePayeeChangeFn(newPayee, oldPayee);
       }
 
@@ -588,7 +610,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        *
        * @private
       */
-      _emitValueChange(val) {
+      _emitValueChange(val: any) {
         return this.subscribeValueChangeFn && this.subscribeValueChangeFn(val);
       }
 
@@ -598,7 +620,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        *
        * @private
       */
-      _emitClearedValueChange(val) {
+      _emitClearedValueChange(val: any) {
         for (let i = 0; i < this.subscribeClearedValueChangeFn.length; i++) {
           this.subscribeClearedValueChangeFn[i](val);
         }
@@ -610,7 +632,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        *
        * @private
       */
-      _emitUnclearedValueChange(val) {
+      _emitUnclearedValueChange(val: any) {
         for (let i = 0; i < this.subscribeUnclearedValueChangeFn.length; i++) {
           this.subscribeUnclearedValueChangeFn[i](val);
         }
@@ -631,7 +653,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        * Mark any linked transfer as deleted, too.
       */
       remove() {
-        this.splits.forEach(split => {
+        this.splits.forEach((split: any) => {
           split.remove();
         });
 
@@ -655,7 +677,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        * @returns {object}
       */
       toJSON() {
-        this._data.splits = this.splits.map(s => s.toJSON());
+        this._data.splits = this.splits.map((s: any) => s.toJSON());
 
         return this._data;
       }
@@ -695,7 +717,7 @@ angular.module('financier').factory('transaction', (uuid, splitTransaction) => {
        * @returns {boolean} True if document _id is in the budget
        * as a Transaction.
        */
-      static contains(_id) {
+      static contains(_id: any) {
         return _id > this.startKey && _id < this.endKey;
       }
     }

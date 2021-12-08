@@ -1,4 +1,15 @@
-angular.module('financier').controller('budgetsCtrl', function ($q, Budget, BudgetOpened, myBudgets, myBudgetsOpened, $scope, $http, db, ngDialog) {
+angular.module('financier').controller('budgetsCtrl', function(
+  this: any,
+  $q,
+  Budget,
+  BudgetOpened,
+  myBudgets,
+  myBudgetsOpened,
+  $scope,
+  $http,
+  db,
+  ngDialog
+) {
   this.budgets = myBudgets;
   this.budgetsOpened = myBudgetsOpened;
 
@@ -6,15 +17,16 @@ angular.module('financier').controller('budgetsCtrl', function ($q, Budget, Budg
     $q.all([
       db.budgets.all(),
       db.budgetsOpened.all()
+    // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'budgets' implicitly has an 'any' ... Remove this comment to see the full error message
     ]).then(([budgets, budgetsOpened]) => {
       this.budgets = budgets;
       this.budgetsOpened = budgetsOpened;
     });
   };
 
-  this.budgetOrder = budget => this.budgetsOpened[budget.id] ? this.budgetsOpened[budget.id].opened : 0;
+  this.budgetOrder = (budget: any) => this.budgetsOpened[budget.id] ? this.budgetsOpened[budget.id].opened : 0;
 
-  function getId(_id) {
+  function getId(_id: any) {
     return _id.slice(_id.lastIndexOf('_') + 1);
   }
 
@@ -22,7 +34,7 @@ angular.module('financier').controller('budgetsCtrl', function ($q, Budget, Budg
     getBudgets();
   });
 
-  $scope.$on('pouchdb:change', (e, change) => {
+  $scope.$on('pouchdb:change', (e: any, change: any) => {
     // if it's a Budget
     if (Budget.contains(change.id)) {
 
@@ -72,18 +84,18 @@ angular.module('financier').controller('budgetsCtrl', function ($q, Budget, Budg
     }
   });
 
-  let removingBudget;
+  let removingBudget: any;
 
-  this.isRemoving = budget => budget === removingBudget;
+  this.isRemoving = (budget: any) => budget === removingBudget;
 
-  this.removing = (budget, e) => {
+  this.removing = (budget: any, e: any) => {
     e.preventDefault();
     e.stopPropagation();
 
     removingBudget = budget;
   };
 
-  this.remove = budget => {
+  this.remove = (budget: any) => {
     const recordsToRemove = [
       db.budget(budget.id).remove()
     ];
@@ -102,11 +114,12 @@ angular.module('financier').controller('budgetsCtrl', function ($q, Budget, Budg
     });
   };
 
-  this.edit = (budget, e) => {
+  this.edit = (budget: any, e: any) => {
     e.preventDefault();
     e.stopPropagation();
 
     ngDialog.open({
+      // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
       template: require('../../views/modal/editBudget.html'),
       controller: 'editBudgetCtrl as editBudgetCtrl',
       resolve: {

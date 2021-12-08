@@ -1,6 +1,29 @@
 import moment from 'moment';
 
-angular.module('financier').controller('createAccountCtrl', function ($locale, myAccount, manager, myBudg, transaction, $q, $rootScope, $scope, $stateParams, category, masterCategory, addCategory, masterCategories, MonthCategory, month, currencyDigits, filterAccounts, onBudgetAccounts, offBudgetAccounts, $translate) {
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
+angular.module('financier').controller('createAccountCtrl', function(
+  this: any,
+  $locale,
+  myAccount,
+  manager,
+  myBudg,
+  transaction,
+  $q,
+  $rootScope,
+  $scope,
+  $stateParams,
+  category,
+  masterCategory,
+  addCategory,
+  masterCategories,
+  MonthCategory,
+  month,
+  currencyDigits,
+  filterAccounts,
+  onBudgetAccounts,
+  offBudgetAccounts,
+  $translate
+) {
   const Transaction = transaction($stateParams.budgetId);
   const Category = category($stateParams.budgetId);
   const MasterCategory = masterCategory($stateParams.budgetId);
@@ -13,7 +36,7 @@ angular.module('financier').controller('createAccountCtrl', function ($locale, m
   this.startingBalanceValid = false;
   this.startingBalanceDate = new Date();
 
-  this.getGroupName = onBudget => $translate.instant(onBudget ? 'ON_BUDGET' : 'OFF_BUDGET');
+  this.getGroupName = (onBudget: any) => $translate.instant(onBudget ? 'ON_BUDGET' : 'OFF_BUDGET');
 
   // angular-translate escpaes newline characters
   this.accountTypeHelp = $translate.instant('ACCOUNT_TYPE_HELP').replace(/\\n/g, '\n');

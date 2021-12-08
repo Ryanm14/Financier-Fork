@@ -1,5 +1,5 @@
-angular.module('financier').controller('signinCtrl', function (User, $scope, $rootScope, ngDialog) {
-  this.login = (username, password, closeThisDialog) => {
+angular.module('financier').controller('signinCtrl', function(this: any, User, $scope, $rootScope, ngDialog) {
+  this.login = (username: any, password: any, closeThisDialog: any) => {
     this.loading = true;
     this.error = null;
 
@@ -12,7 +12,7 @@ angular.module('financier').controller('signinCtrl', function (User, $scope, $ro
     .finally(() => {
       this.loading = false;
     })
-    .catch(e => {
+    .catch((e: any) => {
       this.error = e.data;
     });
   };
@@ -21,6 +21,7 @@ angular.module('financier').controller('signinCtrl', function (User, $scope, $ro
     $scope.closeThisDialog();
 
     ngDialog.open({
+      // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
       template: require('../../views/modal/requestResetPassword.html'),
       controller: 'requestResetPasswordCtrl as requestResetPasswordCtrl',
       resolve: {

@@ -1,7 +1,10 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
 if (process.env.NODE_ENV === 'production') {
+  // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
   require('./selfxssWarning');
 }
 
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'fast... Remove this comment to see the full error message
 import fastclick from 'fastclick';
 fastclick.attach(document.body);
 

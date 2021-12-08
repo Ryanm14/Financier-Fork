@@ -1,4 +1,5 @@
-angular.module('financier').factory('offline', $rootScope => {
+angular.module('financier').factory('offline', ($rootScope: any) => {
+  // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
   const runtime = require('offline-plugin/runtime');
 
   function install() {

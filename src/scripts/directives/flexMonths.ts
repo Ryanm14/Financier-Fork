@@ -1,5 +1,7 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'unde... Remove this comment to see the full error message
 import { throttle } from 'underscore';
 
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
 angular.module('financier').directive('flexMonths', ($rootScope) => {
   return {
     restrict: 'A',

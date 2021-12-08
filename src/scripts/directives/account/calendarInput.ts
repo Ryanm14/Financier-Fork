@@ -1,5 +1,6 @@
 import moment from 'moment';
 
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
 angular.module('financier').directive('calendarInput', ($rootScope, $locale, inputDropSetup) => {
   let FIRSTDAYOFWEEK = $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK;
   const shortDate = $locale.DATETIME_FORMATS.shortDate,
@@ -20,6 +21,7 @@ angular.module('financier').directive('calendarInput', ($rootScope, $locale, inp
     controllerAs: 'calendarCtrl',
     controller: function ($scope, $element) {
       const input = $element,
+        // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
         template = require('./calendarInput.html');
 
       const dropSetup = inputDropSetup($scope, input, template);
@@ -30,25 +32,26 @@ angular.module('financier').directive('calendarInput', ($rootScope, $locale, inp
 
       $scope.thisMonth = new Date();
 
-      $scope.$watch((() => this.ngModel), m => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'ngModel' does not exist on type 'IDirect... Remove this comment to see the full error message
+      $scope.$watch((() => this.ngModel), (m: any) => {
         if (m) {
           $scope.thisMonth = m;
           $scope.month = $scope.generateMonth(m, m);
         }
       });
 
-      $scope.datesAreEqualToMonth = (d1, d2) => {
+      $scope.datesAreEqualToMonth = (d1: any, d2: any) => {
         return d1 && d2 && (d1.getYear() === d2.getYear()) && (d1.getMonth() === d2.getMonth());
       };
 
-      $scope.datesAreEqualToDay = (d1, d2) => {
+      $scope.datesAreEqualToDay = (d1: any, d2: any) => {
         return d1 &&
                d2 &&
                (d1.getYear() === d2.getYear()) && (d1.getMonth() === d2.getMonth()) &&
                (d1.getDate() === d2.getDate());
       };
 
-      input.on('keydown', event => {
+      input.on('keydown', (event: any) => {
         // down OR (= AND SHIFT (basically + on keyboard or numpad))
         if (event.which === 38 ||
             (plusMinusEnabled && ((event.which === 187 && event.shiftKey) || event.which === 107))
@@ -72,14 +75,17 @@ angular.module('financier').directive('calendarInput', ($rootScope, $locale, inp
           dropSetup.close();
           focusNextField();
         } else if (event.which === 34) { // pageDown
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'ngModel' does not exist on type 'IDirect... Remove this comment to see the full error message
           this.ngModel = moment(this.ngModel).add(-1, 'month').toDate();
 
           event.preventDefault();
         } else if (event.which === 33) { // pageUp
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'ngModel' does not exist on type 'IDirect... Remove this comment to see the full error message
           this.ngModel = moment(this.ngModel).add(1, 'month').toDate();
 
           event.preventDefault();
         } else if (event.which === 84) { // 't'
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'ngModel' does not exist on type 'IDirect... Remove this comment to see the full error message
           this.ngModel = new Date();
 
           event.preventDefault();
@@ -90,7 +96,7 @@ angular.module('financier').directive('calendarInput', ($rootScope, $locale, inp
         $scope.$apply();
       });
 
-      $scope.generateMonth = function (date, selectedDate) {
+      $scope.generateMonth = function (date: any, selectedDate: any) {
         var d, dateIterator, i, j, month, startingDay, today, week;
         startingDay = (function () {
           var firstDayOfMonth, month, offset, ret, year;
@@ -134,6 +140,7 @@ angular.module('financier').directive('calendarInput', ($rootScope, $locale, inp
       };
 
       const update = () => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'ngModel' does not exist on type 'IDirect... Remove this comment to see the full error message
         $scope.month = $scope.generateMonth($scope.thisMonth, this.ngModel);
       };
 
@@ -160,22 +167,27 @@ angular.module('financier').directive('calendarInput', ($rootScope, $locale, inp
       };
 
       $scope.nextDay = () => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'ngModel' does not exist on type 'IDirect... Remove this comment to see the full error message
         const val = nextDay(this.ngModel);
 
         $scope.thisMonth = val;
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'ngModel' does not exist on type 'IDirect... Remove this comment to see the full error message
         this.ngModel = val;
         update();
       };
 
       $scope.previousDay = () => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'ngModel' does not exist on type 'IDirect... Remove this comment to see the full error message
         const val = previousDay(this.ngModel);
 
         $scope.thisMonth = val;
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'ngModel' does not exist on type 'IDirect... Remove this comment to see the full error message
         this.ngModel = val;
         update();
       };
 
-      $scope.select = date => {
+      $scope.select = (date: any) => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'ngModel' does not exist on type 'IDirect... Remove this comment to see the full error message
         this.ngModel = date;
         update();
 
@@ -198,7 +210,7 @@ angular.module('financier').directive('calendarInput', ($rootScope, $locale, inp
         }
       }
 
-      function nextMonth(date) {
+      function nextMonth(date: any) {
         if (date.getMonth() === 11) {
           return new Date(date.getFullYear() + 1, 0);
         } else {
@@ -206,15 +218,15 @@ angular.module('financier').directive('calendarInput', ($rootScope, $locale, inp
         }
       }
 
-      function nextDay(date) {
+      function nextDay(date: any) {
         return new Date(date.setDate(date.getDate() + 1));
       }
 
-      function previousDay(date) {
+      function previousDay(date: any) {
         return new Date(date.setDate(date.getDate() - 1));
       }
 
-      function previousMonth(date) {
+      function previousMonth(date: any) {
         if (date.getMonth() === 0) {
           return new Date(date.getFullYear() - 1, 11);
         } else {
@@ -222,14 +234,14 @@ angular.module('financier').directive('calendarInput', ($rootScope, $locale, inp
         }
       }
 
-      function nextYear(date) {
+      function nextYear(date: any) {
         var d;
         d = new Date(date);
         d.setFullYear(d.getFullYear() + 1);
         return d;
       }
 
-      function previousYear(date) {
+      function previousYear(date: any) {
         var d;
         d = new Date(date);
         d.setFullYear(d.getFullYear() - 1);

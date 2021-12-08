@@ -1,9 +1,21 @@
-angular.module('financier').controller('createBudgetCtrl', function ($translate, $q, $state, $scope, $rootScope, db, Budget, BudgetOpened, payee, currencies) {
+angular.module('financier').controller('createBudgetCtrl', function(
+  this: any,
+  $translate,
+  $q,
+  $state,
+  $scope,
+  $rootScope,
+  db,
+  Budget,
+  BudgetOpened,
+  payee,
+  currencies
+) {
   this.currencies = currencies;
 
   this.currency = 'USD';
 
-  this.submit = function (name, currency) {
+  this.submit = function (name: any, currency: any) {
     const budget = new Budget({ name, currency });
     const budgetOpened = new BudgetOpened({
       _id: BudgetOpened.prefix + budget.id
@@ -30,7 +42,7 @@ angular.module('financier').controller('createBudgetCtrl', function ($translate,
         budgetId: budget.id
       });
     })
-    .catch(e => {
+    .catch((e: any) => {
       this.loading = false;
 
       throw e;

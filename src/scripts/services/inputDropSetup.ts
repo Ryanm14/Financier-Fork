@@ -1,11 +1,13 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'teth... Remove this comment to see the full error message
 import Drop from 'tether-drop';
 
-angular.module('financier').factory('inputDropSetup', ($rootScope, $document, $sce, $compile, $timeout) => {
-  return (scope, input, template, onClosed) => {
-    let dropInstance,
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
+angular.module('financier').factory('inputDropSetup', ($rootScope: any, $document: any, $sce: any, $compile: any, $timeout: any) => {
+  return (scope: any, input: any, template: any, onClosed: any) => {
+    let dropInstance: any,
       accountSuggestClicked = false;
 
-    let showDrop;
+    let showDrop: any;
 
     const handleDocumentClick = () => {
       if (!accountSuggestClicked) {
@@ -17,6 +19,7 @@ angular.module('financier').factory('inputDropSetup', ($rootScope, $document, $s
     };
 
 
+    // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
     const wrap = angular.element('<div></div>').append(template);
     const content = $compile(wrap)(scope);
 
@@ -71,7 +74,7 @@ angular.module('financier').factory('inputDropSetup', ($rootScope, $document, $s
       accountSuggestClicked = true;
     });
 
-    content.on('click', e => {
+    content.on('click', (e: any) => {
       e.stopPropagation();
     });
 

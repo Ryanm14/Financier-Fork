@@ -1,6 +1,9 @@
 angular.module('financier').factory('Settings', () => {
   return class Settings {
-    constructor(data) {
+    _hints: any;
+    data: any;
+    fn: any;
+    constructor(data: any) {
       this.data = angular.merge({
         hints: {
           outflow: true
@@ -25,7 +28,7 @@ angular.module('financier').factory('Settings', () => {
       return this._hints;
     }
 
-    subscribe(fn) {
+    subscribe(fn: any) {
       this.fn = fn;
     }
 
@@ -37,7 +40,7 @@ angular.module('financier').factory('Settings', () => {
       return this.data._id;
     }
 
-    set _rev(r) {
+    set _rev(r: any) {
       this.data._rev = r;
     }
 

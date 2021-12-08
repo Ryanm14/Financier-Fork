@@ -1,10 +1,13 @@
-angular.module('financier').factory('payee', uuid => {
-  return budgetId => {
+angular.module('financier').factory('payee', (uuid: any) => {
+  return (budgetId: any) => {
 
     /**
      * Represents a payee
      */
     class Payee {
+      data: any;
+      fn: any;
+      id: any;
 
       /**
        * Create an Payee
@@ -12,7 +15,7 @@ angular.module('financier').factory('payee', uuid => {
        * @param {object} [data] - The record object from the database
        * (with `_id` and `_rev`).
        */
-      constructor(data) {
+      constructor(data: any) {
         const myData = angular.extend({
           name: null,
           autosuggest: true,
@@ -133,7 +136,7 @@ angular.module('financier').factory('payee', uuid => {
        * @param {function} fn - This function will be invoked upon record
        * changes with the Payee object as the first parameter.
       */
-      subscribe(fn) {
+      subscribe(fn: any) {
         this.fn = fn;
       }
 
@@ -191,7 +194,7 @@ angular.module('financier').factory('payee', uuid => {
        * @returns {boolean} True if document _id is in the budget
        * as a payee.
        */
-      static contains(_id) {
+      static contains(_id: any) {
         return _id > this.startKey && _id < this.endKey;
       }
     }

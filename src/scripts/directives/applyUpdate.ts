@@ -1,7 +1,7 @@
 angular.module('financier').directive('applyUpdate', offline => {
   let show = false;
 
-  function controller($scope) {
+  function controller(this: any, $scope: any) {
     this.show = show;
 
     $scope.$on('serviceWorker:updateReady', () => {
@@ -27,6 +27,7 @@ angular.module('financier').directive('applyUpdate', offline => {
 
   return {
     restrict: 'E',
+    // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
     template: require('./applyUpdate.html'),
     controller,
     replace: true,

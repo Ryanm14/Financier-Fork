@@ -10,7 +10,8 @@ angular.module('financier').directive('transactionValue', ($filter, $locale) => 
     require: 'ngModel',
     link: (scope, element, attrs, ngModelCtrl) => {
       //format text going to user (model to view)
-      ngModelCtrl.$formatters.push(function (value) {
+      // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
+      ngModelCtrl.$formatters.push(function (value: any) {
         if (!value) {
           return null;
         }
@@ -19,14 +20,17 @@ angular.module('financier').directive('transactionValue', ($filter, $locale) => 
           intCurrencyFilter(
             value,
             true,
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'dbCtrl' does not exist on type 'IScope'.
             scope.$parent.dbCtrl.currencyDigits
           ),
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'dbCtrl' does not exist on type 'IScope'.
           scope.$parent.dbCtrl.currencyDigits
         );
       });
 
       //format text from the user (view to model)
-      ngModelCtrl.$parsers.push(function (value) {
+      // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
+      ngModelCtrl.$parsers.push(function (value: any) {
         if (value === DECIMAL_SEP) {
           return;
         }
@@ -44,6 +48,7 @@ angular.module('financier').directive('transactionValue', ($filter, $locale) => 
           return 0;
         }
 
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dbCtrl' does not exist on type 'IScope'.
         return Math.round(num * Math.pow(10, scope.$parent.dbCtrl.currencyDigits));
       });
     }

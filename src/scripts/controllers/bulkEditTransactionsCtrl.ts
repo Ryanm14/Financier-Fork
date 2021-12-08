@@ -1,17 +1,18 @@
-angular.module('financier').controller('bulkEditTransactionsCtrl', function ($rootScope, $scope, ngDialog) {
-  this.removeAll = (transactions, event) => {
+angular.module('financier').controller('bulkEditTransactionsCtrl', function(this: any, $rootScope, $scope, ngDialog) {
+  this.removeAll = (transactions: any, event: any) => {
     $scope.stopPropagation(event);
 
     for (let i = 0; i < transactions.length; i++) {
       if (transactions[i].transfer && transactions[i].transfer.constructorName === 'SplitTransaction') {
         return ngDialog.open({
+          // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
           template: require('../../views/modal/noDeleteSplitTransfer.html'),
           controller: 'cancelClickCtrl'
         });
       }
     }
 
-    const reconciled = transactions.reduce((prev, curr) => {
+    const reconciled = transactions.reduce((prev: any, curr: any) => {
       return prev + (curr.reconciled ? 1 : 0);
     }, 0);
 
@@ -22,6 +23,7 @@ angular.module('financier').controller('bulkEditTransactionsCtrl', function ($ro
       scope.stopPropagation = $scope.stopPropagation;
 
       ngDialog.openConfirm({
+        // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
         template: require('../../views/modal/removeTransactionsConfirm.html'),
         scope,
         className: 'ngdialog-theme-default ngdialog-theme-default--danger modal'
@@ -32,7 +34,7 @@ angular.module('financier').controller('bulkEditTransactionsCtrl', function ($ro
     }
 
     function remove() {
-      transactions.forEach(transaction => {
+      transactions.forEach((transaction: any) => {
         $scope.manager.removeTransaction(transaction);
         
         if (transaction.payee) {
@@ -47,7 +49,7 @@ angular.module('financier').controller('bulkEditTransactionsCtrl', function ($ro
     }
   };
 
-  function removePayee(transaction) {
+  function removePayee(transaction: any) {
     const transactions = Object.keys($scope.manager.transactions).map(k => $scope.manager.transactions[k]);
 
     for (let i = 0; i < transactions.length; i++) {

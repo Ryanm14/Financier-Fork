@@ -1,6 +1,6 @@
 angular.module('financier').directive('onEnterGoNext', () => {
-  function link(scope, element, attrs) {
-    element.on('keydown', e => {
+  function link(scope: any, element: any, attrs: any) {
+    element.on('keydown', (e: any) => {
       const els = document.querySelectorAll(`[tabindex='${attrs.tabindex}']`);
 
       if (e.which === 13 || e.which === 40) { // enter key, down key
@@ -22,7 +22,7 @@ angular.module('financier').directive('onEnterGoNext', () => {
       }
     });
 
-    function findNext(els, originalI, nextI) {
+    function findNext(els: any, originalI: any, nextI: any) {
       const newI = (nextI + 1) % els.length;
 
       if (originalI === newI) {
@@ -38,7 +38,7 @@ angular.module('financier').directive('onEnterGoNext', () => {
       }
     }
 
-    function findPrevious(els, originalI, nextI) {
+    function findPrevious(els: any, originalI: any, nextI: any) {
       const newI = nextI - 1 < 0 ? els.length - 1 : nextI - 1;
 
       if (originalI === newI) {
@@ -54,7 +54,7 @@ angular.module('financier').directive('onEnterGoNext', () => {
       }
     }
 
-    function isVisible(el) {
+    function isVisible(el: any) {
       /* offsetParent would be null if display 'none' is set.
        However Chrome, IE and MS Edge returns offsetParent as null for elements
        with CSS position 'fixed'. So check whether the dimensions are zero.
@@ -67,7 +67,7 @@ angular.module('financier').directive('onEnterGoNext', () => {
       return true;
     }
 
-    function choose(el) {
+    function choose(el: any) {
       el.focus();
       el.select();
     }

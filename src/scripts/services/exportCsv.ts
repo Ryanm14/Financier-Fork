@@ -1,14 +1,17 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'papa... Remove this comment to see the full error message
 import Papa from 'papaparse';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'file... Remove this comment to see the full error message
 import fileSaver from 'file-saver';
 import JSZip from 'jszip';
 
-angular.module('financier').factory('exportCsv', ($translate, $filter, flags) => {
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
+angular.module('financier').factory('exportCsv', ($translate: any, $filter: any, flags: any) => {
   const intCurrency = $filter('intCurrency'),
     currency = $filter('currency'),
     dateFilter = $filter('date'),
-    urlFriendlyDateFilter = date => dateFilter(date, 'yyyy-MM-dd HHmm');
+    urlFriendlyDateFilter = (date: any) => dateFilter(date, 'yyyy-MM-dd HHmm');
 
-  function create(payload) {
+  function create(payload: any) {
     return _package(
       _buildTransactionsCsv(payload),
       _buildBudgetCsv(payload),
@@ -28,16 +31,16 @@ angular.module('financier').factory('exportCsv', ($translate, $filter, flags) =>
     masterCategories = {},
     payees = {},
     accounts = []
-  }) {
+  }: any) {
     return Papa.unparse({
       fields: ['ACCOUNT', 'FLAG', 'DATE', 'PAYEE', 'CATEGORY_GROUP_CATEGORY', 'CATEGORY_GROUP',  'CATEGORY',  'MEMO',  'OUTFLOW', 'INFLOW', 'CLEARED'].map($translate.instant),
       data: transactions
-      .filter(trans => {
+      .filter((trans: any) => {
         // If not a parent of splits
         return !trans.splits || !trans.splits.length;
       })
-      .sort((a, b) => (b.date.getTime() + b.value) - (a.date.getTime() + a.value))
-      .map(trans => {
+      .sort((a: any, b: any) => (b.date.getTime() + b.value) - (a.date.getTime() + a.value))
+      .map((trans: any) => {
         const account = _getAccount(trans.account, accounts);
         const flag = _getFlagColor(trans.transaction ? trans.transaction.flag : trans.flag);
         const date = dateFilter(trans.date, 'shortDate');
@@ -119,9 +122,10 @@ angular.module('financier').factory('exportCsv', ($translate, $filter, flags) =>
     months,
     currencySymbol = '$',
     currencyDigits = 2,
+
     // categories = {},
     masterCategories = {}
-  }) {
+  }: any) {
     const data = [];
 
     const sortedMasterCategories = Object
@@ -194,7 +198,7 @@ angular.module('financier').factory('exportCsv', ($translate, $filter, flags) =>
     });
   }
 
-  function _package(transactionsCsv, budgetCsv, budgetName) {
+  function _package(transactionsCsv: any, budgetCsv: any, budgetName: any) {
     var zip = new JSZip();
 
     const date = urlFriendlyDateFilter(new Date());
@@ -205,7 +209,7 @@ angular.module('financier').factory('exportCsv', ($translate, $filter, flags) =>
     return zip.generateAsync({ type:'blob' });
   }
 
-  function _getFlagColor(color) {
+  function _getFlagColor(color: any) {
     for (let i = 0; i < flags.length; i++) {
       if (flags[i].color === color) {
         return $translate.instant(flags[i].label);
@@ -213,7 +217,7 @@ angular.module('financier').factory('exportCsv', ($translate, $filter, flags) =>
     }
   }
 
-  function _getCategory(transaction, categories) {
+  function _getCategory(transaction: any, categories: any) {
     if (categories[transaction.category]) {
       return categories[transaction.category].name;
     }
@@ -225,7 +229,7 @@ angular.module('financier').factory('exportCsv', ($translate, $filter, flags) =>
     }
   }
 
-  function _getMasterCategory(transaction, masterCategories, categories) {
+  function _getMasterCategory(transaction: any, masterCategories: any, categories: any) {
     if (categories[transaction.category] && categories[transaction.category].masterCategory) {
       return masterCategories[categories[transaction.category].masterCategory].name;
     }
@@ -235,7 +239,7 @@ angular.module('financier').factory('exportCsv', ($translate, $filter, flags) =>
     }
   }
 
-  function _getAccount(id, accounts) {
+  function _getAccount(id: any, accounts: any) {
     for (let i = 0; i < accounts.length; i++) {
       if (accounts[i].id === id) {
         return accounts[i].name;

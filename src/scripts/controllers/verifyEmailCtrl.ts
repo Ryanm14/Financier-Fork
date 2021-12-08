@@ -1,4 +1,4 @@
-angular.module('financier').controller('verifyEmailCtrl', function (User, $state, $stateParams, $rootScope) {
+angular.module('financier').controller('verifyEmailCtrl', function(this: any, User, $state, $stateParams, $rootScope) {
   this.loading = true;
 
   User.verifyEmail($stateParams.token)

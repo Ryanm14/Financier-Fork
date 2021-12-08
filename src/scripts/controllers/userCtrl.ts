@@ -1,6 +1,7 @@
 import moment from 'moment';
 
-angular.module('financier').controller('userCtrl', function ($rootScope, $scope, User, db, ngDialog, $timeout, $state) {
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
+angular.module('financier').controller('userCtrl', function(this: any, $rootScope, $scope, User, db, ngDialog, $timeout, $state) {
   $rootScope.loaded = true;
   this.loadingSubscription = true;
 
@@ -15,9 +16,9 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
       });
     };
 
-    this.addSource = token => {
+    this.addSource = (token: any) => {
       return User.addSource(token)
-      .then(source => {
+      .then((source: any) => {
         this.source = source;
       });
     };
@@ -26,7 +27,7 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
       this.loadingRemoveSource = true;
 
       return User.removeSource()
-      .then(source => {
+      .then((source: any) => {
         this.source = source;
       })
       .finally(() => {
@@ -37,7 +38,7 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
     this.startSubscription = () => {
       this.loadingStartSubscription = true;
 
-      User.startSubscription().then(subscription => {
+      User.startSubscription().then((subscription: any) => {
         this.subscription = subscription;
 
         // Start the sync of new budget data
@@ -51,7 +52,7 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
 
     this.stopSubscription = () => {
       this.loadingStopSubscription = true;
-      User.stopSubscription().then(subscription => {
+      User.stopSubscription().then((subscription: any) => {
         this.subscription = subscription;
       })
       .finally(() => {
@@ -62,7 +63,7 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
     this.loadingSubscription = true;
 
     this.getSubscription = () => {
-      return User.getSubscription().then(subscription => {
+      return User.getSubscription().then((subscription: any) => {
         this.subscription = subscription;
       })
       .catch(() => {
@@ -78,7 +79,7 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
     this.loadingSource = true;
 
     this.getSource = () => {
-      return User.getSource().then(source => {
+      return User.getSource().then((source: any) => {
         this.source = source;
       })
       .catch(() => {
@@ -96,7 +97,7 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
 
   const getSession = () => {
     return User.session()
-    .then(s => {
+    .then((s: any) => {
       if (s.userCtx && s.userCtx.name) {
         this.email = s.userCtx.name;
 
@@ -156,6 +157,7 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
 
   this.removeLocalData = () => {
     return ngDialog.openConfirm({
+      // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
       template: require('../../views/modal/removeLocalData.html'),
       className: 'ngdialog-theme-default ngdialog-theme-default--danger modal'
     })
@@ -177,6 +179,7 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
 
   this.signin = () => {
     ngDialog.open({
+      // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
       template: require('../../views/modal/signin.html'),
       controller: 'signinCtrl as signinCtrl'
     });
@@ -189,11 +192,11 @@ angular.module('financier').controller('userCtrl', function ($rootScope, $scope,
   // Default is no syncing
   this.status = 'offline';
 
-  $rootScope.$on('syncStatus:update', (e, status) => {
+  $rootScope.$on('syncStatus:update', (e: any, status: any) => {
     this.status = status;
   });
 
-  $rootScope.$on('login', (e, status) => {
+  $rootScope.$on('login', (e: any, status: any) => {
     this.status = status;
   });
 });

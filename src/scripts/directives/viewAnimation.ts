@@ -1,5 +1,5 @@
 angular.module('financier').directive('stateClass', ['$state', function ($state) {
-  var prevStateName;
+  var prevStateName: any;
 
     return {
         link: function (scope, element) {

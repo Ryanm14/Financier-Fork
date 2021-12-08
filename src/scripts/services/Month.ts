@@ -1,10 +1,20 @@
-angular.module('financier').factory('month', MonthCategory => {
-  return budgetId => {
+angular.module('financier').factory('month', (MonthCategory: any) => {
+  return (budgetId: any) => {
 
     /**
      * Represents a Month
      */
     class Month {
+      cache: any;
+      categories: any;
+      categoryCache: any;
+      data: any;
+      date: any;
+      nextChangeAvailableFn: any;
+      nextChangeAvailableLastMonthFn: any;
+      nextChangeOverspentFn: any;
+      nextRollingFn: any;
+      saveFn: any;
 
       /**
        * Create a Month
@@ -17,7 +27,7 @@ angular.module('financier').factory('month', MonthCategory => {
        * Object to save to the database.
        * Once complete, will set the _rev of the Object (`obj._rev = 'uid'`).
        */
-      constructor(data, saveFn) {
+      constructor(data: any, saveFn: any) {
         const defaults = {
         };
 
@@ -27,6 +37,7 @@ angular.module('financier').factory('month', MonthCategory => {
 
         if (angular.isString(data)) {
           myData = defaults;
+          // @ts-expect-error ts-migrate(2339) FIXME: Property '_id' does not exist on type '{}'.
           myData._id = `b_${budgetId}_month_${data}`;
         } else {
           myData = angular.extend(defaults, data);
@@ -59,7 +70,7 @@ angular.module('financier').factory('month', MonthCategory => {
        * @param {string} catId - The category UID.
        * @param {currency} rolling - The absolute value to be used.
       */
-      setRolling(catId, rolling, overspending) {
+      setRolling(catId: any, rolling: any, overspending: any) {
         this.createCategoryIfEmpty(catId);
         this.createCategoryCacheIfEmpty(catId);
 
@@ -109,7 +120,7 @@ angular.module('financier').factory('month', MonthCategory => {
        *
        * @param {string} catId - The category's ID.
        */
-      startRolling(catId) {
+      startRolling(catId: any) {
         this.createCategoryCacheIfEmpty(catId);
         this.setRolling(catId, this.categoryCache[catId].rolling, this.categoryCache[catId].overspending);
       }
@@ -121,7 +132,7 @@ angular.module('financier').factory('month', MonthCategory => {
        * @param {currency} amount - The absolute amount to set the category's
        * budget to.
        */
-      setBudget(catId, amount) {
+      setBudget(catId: any, amount: any) {
         this.createCategoryCacheIfEmpty(catId);
         this.createCategoryIfEmpty(catId);
 
@@ -133,21 +144,21 @@ angular.module('financier').factory('month', MonthCategory => {
        *
        * @param {MonthCategory} monthCat - The month category integrate with the month.
        */
-      addBudget(monthCat) {
+      addBudget(monthCat: any) {
           // assume is MonthCategory
           this.categories[monthCat.categoryId] = monthCat;
           this.createCategoryCacheIfEmpty(monthCat.categoryId);
 
-          monthCat.subscribe(record => {
+          monthCat.subscribe((record: any) => {
             this.saveFn(record);
           });
 
-          monthCat.subscribeBudget(value => {
+          monthCat.subscribeBudget((value: any) => {
             this.budgetChange(monthCat.categoryId, value);
           });
 
 
-          monthCat.subscribeOverspending(newO => {
+          monthCat.subscribeOverspending((newO: any) => {
             const oldOverspending = this.categoryCache[monthCat.categoryId].overspending; 
             this.categoryCache[monthCat.categoryId].overspending = newO;
 
@@ -188,7 +199,7 @@ angular.module('financier').factory('month', MonthCategory => {
        *
        * @param {MonthCategory} monthCat - The month category integrate with the month.
        */
-      removeBudget(monthCat) {
+      removeBudget(monthCat: any) {
           // assume is MonthCategory
 
           monthCat.subscribeBudget(null);
@@ -218,7 +229,7 @@ angular.module('financier').factory('month', MonthCategory => {
       /**
        * @todo Not currently used
        */
-      addTransaction(trans) {
+      addTransaction(trans: any) {
         // The splits themselves are added, not the parent
         if (trans.category === 'split') {
           return;
@@ -231,8 +242,8 @@ angular.module('financier').factory('month', MonthCategory => {
         }
       }
 
-      _addIncome(trans) {
-        const valueChangeFn = val => {
+      _addIncome(trans: any) {
+        const valueChangeFn = (val: any) => {
           this.cache.totalIncome += val;
           this.changeAvailable(val);
         };
@@ -242,10 +253,10 @@ angular.module('financier').factory('month', MonthCategory => {
         trans.subscribeValueChange(valueChangeFn);
       }
 
-      _addOutflow(trans) {
+      _addOutflow(trans: any) {
         this.createCategoryCacheIfEmpty(trans.category);
 
-        const valueChangeFn = val => {
+        const valueChangeFn = (val: any) => {
           this.categoryCache[trans.category].outflow += val;
           this.cache.totalOutflow += val;
 
@@ -270,7 +281,7 @@ angular.module('financier').factory('month', MonthCategory => {
       /**
        * @todo Not currently used
        */
-      removeTransaction(trans) {
+      removeTransaction(trans: any) {
         // The splits themselves are added, not the parent
         if (trans.category === 'split') {
           return;
@@ -283,14 +294,14 @@ angular.module('financier').factory('month', MonthCategory => {
         }
       }
 
-      _removeIncome(trans) {
+      _removeIncome(trans: any) {
         this.cache.totalIncome -= trans.value;
         this.changeAvailable(-trans.value);
 
         trans.subscribeValueChange(null);
       }
 
-      _removeOutflow(trans) {
+      _removeOutflow(trans: any) {
         this.createCategoryCacheIfEmpty(trans.category);
 
         this.categoryCache[trans.category].outflow -= trans.value;
@@ -321,10 +332,10 @@ angular.module('financier').factory('month', MonthCategory => {
        *
        * Used by angular's ngModel getterSetter: true.
        */
-      note(catId) {
+      note(catId: any) {
         this.createCategoryIfEmpty(catId);
 
-        return note => {
+        return (note: any) => {
 
           if (angular.isDefined(note)) {
             this.categories[catId].note = note;
@@ -342,22 +353,22 @@ angular.module('financier').factory('month', MonthCategory => {
        * @param {string} catId - The category's ID.
        * @private
        */
-      createCategoryIfEmpty(catId) {
+      createCategoryIfEmpty(catId: any) {
         this.createCategoryCacheIfEmpty(catId);
 
         if (!this.categories[catId]) {
           this.categories[catId] = MonthCategory.from(budgetId, this.date, catId);
 
-          this.categories[catId].subscribe(record => {
+          this.categories[catId].subscribe((record: any) => {
             this.saveFn(record);
           });
 
 
-          this.categories[catId].subscribeBudget(value => {
+          this.categories[catId].subscribeBudget((value: any) => {
             this.budgetChange(catId, value);
           });
 
-          this.categories[catId].subscribeOverspending(newO => {
+          this.categories[catId].subscribeOverspending((newO: any) => {
             const oldOverspending = this.categoryCache[catId].overspending;
             this.categoryCache[catId].overspending = newO;
 
@@ -381,7 +392,7 @@ angular.module('financier').factory('month', MonthCategory => {
        * @param {string} catId - The category's ID.
        * @private
        */
-      createCategoryCacheIfEmpty(catId) {
+      createCategoryCacheIfEmpty(catId: any) {
         if (!this.categoryCache[catId]) {
           this.categoryCache[catId] = {
             rolling: 0,
@@ -399,7 +410,7 @@ angular.module('financier').factory('month', MonthCategory => {
        * @param {string} catId - The category's ID.
        * @param {currency} value - The amount to change by.
        */
-      budgetChange(catId, value) {
+      budgetChange(catId: any, value: any) {
         this.cache.totalBudget += value;
 
         this.changeAvailable(-value);
@@ -430,17 +441,17 @@ angular.module('financier').factory('month', MonthCategory => {
        *
        * @param {Month} month - The following month to link together.
        */
-      subscribeNextMonth(nextMonth) {
-        this.nextRollingFn = (catId, balance, overspending) => {
+      subscribeNextMonth(nextMonth: any) {
+        this.nextRollingFn = (catId: any, balance: any, overspending: any) => {
           nextMonth.setRolling(catId, balance, overspending);
         };
-        this.nextChangeAvailableFn = val => {
+        this.nextChangeAvailableFn = (val: any) => {
           nextMonth.changeAvailable(val);
         };
-        this.nextChangeOverspentFn = val => {
+        this.nextChangeOverspentFn = (val: any) => {
           nextMonth.changeOverspent(val);
         };
-        this.nextChangeAvailableLastMonthFn = val => {
+        this.nextChangeAvailableLastMonthFn = (val: any) => {
           nextMonth.changeAvailableLastMonth(val);
         };
 
@@ -460,7 +471,7 @@ angular.module('financier').factory('month', MonthCategory => {
        *
        * @param {currency} value - The amount to change by.
        */
-      changeAvailable(value) {
+      changeAvailable(value: any) {
         this.cache.totalAvailable += value;
         this.nextChangeAvailableLastMonthFn && this.nextChangeAvailableLastMonthFn(value);
         this.nextChangeAvailableFn && this.nextChangeAvailableFn(value);
@@ -472,7 +483,7 @@ angular.module('financier').factory('month', MonthCategory => {
        *
        * @param {currency} value - The amount to change by.
        */
-      changeAvailableLastMonth(value) {
+      changeAvailableLastMonth(value: any) {
         this.cache.totalAvailableLastMonth += value;
       }
 
@@ -483,7 +494,7 @@ angular.module('financier').factory('month', MonthCategory => {
        * @param {currency} value - The amount to change by.
        * @private
        */
-      _changeCurrentOverspent(value) {
+      _changeCurrentOverspent(value: any) {
         this.cache.totalOverspent += value;
         this.nextChangeOverspentFn && this.nextChangeOverspentFn(value);
       }
@@ -495,7 +506,7 @@ angular.module('financier').factory('month', MonthCategory => {
        *
        * @param {currency} value - The amount to change by.
        */
-      changeOverspent(value) {
+      changeOverspent(value: any) {
         this.cache.totalOverspentLastMonth += value;
         this.changeAvailable(-value);
       }
@@ -517,7 +528,7 @@ angular.module('financier').factory('month', MonthCategory => {
        * @param {date} date - The date object to convert to a string. The day of the month and time do not matter.
        * @returns {string} Month date ID
        */
-      static createID(date) {
+      static createID(date: any) {
         const twoDigitMonth = ((date.getMonth() + 1) >= 10) ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1);  
         return date.getFullYear() + '-' + twoDigitMonth + '-01'; 
       }
@@ -557,7 +568,7 @@ angular.module('financier').factory('month', MonthCategory => {
        * @returns {boolean} True if document _id is in the budget
        * as a Month.
        */
-      static contains(_id) {
+      static contains(_id: any) {
         return _id > this.startKey && _id < this.endKey;
       }
     }

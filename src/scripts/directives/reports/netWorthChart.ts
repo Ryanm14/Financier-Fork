@@ -1,9 +1,11 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'char... Remove this comment to see the full error message
 import Chart from 'chart.js';
 
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
 angular.module('financier').directive('netWorthChart', ($filter, netWorth, $translate) => {
   const intCurrency = $filter('intCurrency');
 
-  function capitalize(str) {
+  function capitalize(str: any) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
@@ -21,15 +23,18 @@ angular.module('financier').directive('netWorthChart', ($filter, netWorth, $tran
         }
       });
 
-      function getCurrencyValue(intVal) {
+      function getCurrencyValue(intVal: any) {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dbCtrl' does not exist on type 'IScope'.
         return intCurrency(intVal, true, scope.$parent.dbCtrl.currencyDigits);
       }
 
       function generateReport() {
         const currency = $filter('currency'),
           dateFilter = $filter('date'),
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'transactions' does not exist on type 'IS... Remove this comment to see the full error message
           report = netWorth(scope.transactions);
 
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getContext' does not exist on type 'HTML... Remove this comment to see the full error message
         var ctx = element[0].getContext('2d');
 
         var barChartData = {
@@ -38,7 +43,7 @@ angular.module('financier').directive('netWorthChart', ($filter, netWorth, $tran
             label: $translate.instant('NET_WORTH'),
             type: 'line',
             tension: 0,
-            data: report.netWorth.map(amt => getCurrencyValue(amt)),
+            data: report.netWorth.map((amt: any) => getCurrencyValue(amt)),
             fill: false,
             borderWidth: 1,
             borderColor: '#888',
@@ -49,7 +54,7 @@ angular.module('financier').directive('netWorthChart', ($filter, netWorth, $tran
             type: 'line',
             borderColor: 'rgba(0, 0, 0, 0)',
             tension: 0,
-            data: report.netWorth.map(amt => getCurrencyValue(amt)),
+            data: report.netWorth.map((amt: any) => getCurrencyValue(amt)),
             fill: true,
             radius: 0,
             backgroundColor: 'rgba(255, 255, 0, 0.1)',
@@ -57,7 +62,7 @@ angular.module('financier').directive('netWorthChart', ($filter, netWorth, $tran
           }, {
             type: 'bar',
             label: $translate.instant('DEBTS'),
-            data: report.debt.map(amt => getCurrencyValue(amt)),
+            data: report.debt.map((amt: any) => getCurrencyValue(amt)),
             fill: false,
             backgroundColor: '#ff4c4c',
             borderColor: '#ff4c4c',
@@ -67,7 +72,7 @@ angular.module('financier').directive('netWorthChart', ($filter, netWorth, $tran
           }, {
             type: 'bar',
             label: $translate.instant('ASSETS'),
-            data: report.assets.map(amt => getCurrencyValue(amt)),
+            data: report.assets.map((amt: any) => getCurrencyValue(amt)),
             fill: false,
             backgroundColor: '#93c776',
             borderColor: '#93c776',
@@ -86,11 +91,12 @@ angular.module('financier').directive('netWorthChart', ($filter, netWorth, $tran
             tooltips: {
               mode: 'label',
                 callbacks: {
-                  label: function (tooltipItems, data) {
+                  label: function (tooltipItems: any, data: any) {
                     if (tooltipItems.datasetIndex === 1) {
                       return;
                     }
 
+                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'dbCtrl' does not exist on type 'IScope'.
                     return data.datasets[tooltipItems.datasetIndex].label + ': ' + currency(tooltipItems.yLabel, scope.$parent.dbCtrl.currencySymbol, scope.$parent.dbCtrl.currencyDigits);
                   }
                 }
@@ -113,7 +119,7 @@ angular.module('financier').directive('netWorthChart', ($filter, netWorth, $tran
                   show: true,
                 },
                 ticks: {
-                  callback: date => {
+                  callback: (date: any) => {
                     return capitalize(dateFilter(date, 'MMM \'\'yy'));
                   }
                 }
@@ -131,10 +137,12 @@ angular.module('financier').directive('netWorthChart', ($filter, netWorth, $tran
                 },
                 ticks: {
                   beginAtZero: true,
-                  callback: amount => {
+                  callback: (amount: any) => {
                     return currency(
                       amount,
+                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dbCtrl' does not exist on type 'IScope'.
                       scope.$parent.dbCtrl.currencySymbol,
+                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dbCtrl' does not exist on type 'IScope'.
                       scope.$parent.dbCtrl.currencyDigits
                     );
                   }

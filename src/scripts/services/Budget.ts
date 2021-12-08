@@ -1,15 +1,19 @@
-angular.module('financier').factory('Budget', uuid => {
+angular.module('financier').factory('Budget', (uuid: any) => {
   /**
    * Represents a Budget project
    */
   class Budget {
+    _data: any;
+    _hints: any;
+    fn: any;
+    id: any;
 
     /**
      * Create a Budget
      *
      * @param {object} [data] - The record object from the database
      */
-    constructor(data) {
+    constructor(data: any) {
       this._data = angular.merge({
         hints: {
           outflow: true
@@ -163,7 +167,7 @@ angular.module('financier').factory('Budget', uuid => {
      * @param {function} fn - This function will be invoked upon record
      * changes with the Budget object as the first parameter.
     */
-    subscribe(fn) {
+    subscribe(fn: any) {
       this.fn = fn;
     }
 
@@ -198,7 +202,7 @@ angular.module('financier').factory('Budget', uuid => {
      *
      * @type {string}
     */
-    set _rev(r) {
+    set _rev(r: any) {
       this._data._rev = r;
     }
 
@@ -245,7 +249,7 @@ angular.module('financier').factory('Budget', uuid => {
      * @param {string} _id - The document's _id
      * @returns {boolean} True if document _id is a Budget
      */
-    static contains(_id) {
+    static contains(_id: any) {
       return _id > this.startKey && _id < this.endKey;
     }
   }

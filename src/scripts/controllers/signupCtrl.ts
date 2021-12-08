@@ -1,13 +1,14 @@
-angular.module('financier').controller('signupCtrl', function ($scope, User) {
-  this.submit = (email, password) => {
+angular.module('financier').controller('signupCtrl', function(this: any, $scope, User) {
+  this.submit = (email: any, password: any) => {
     this.loading = true;
 
     User.create(email, password)
     .then(() => {
       this.success = true;
+      // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
       document.activeElement.blur();
     })
-    .catch(e => {
+    .catch((e: any) => {
       if (e.data.errorMessage === 'existingEmail') {
         this.form.email.$setValidity('duplicate', false);
       } else {

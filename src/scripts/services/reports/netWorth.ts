@@ -1,13 +1,13 @@
 angular.module('financier').factory('netWorth', () => {
-  return function generateReport(transactions) {
-    const data = [];
+  return function generateReport(transactions: any) {
+    const data: any = [];
 
     // Play safe, kids
-    transactions.sort((a, b) => {
+    transactions.sort((a: any, b: any) => {
       return a.date - b.date;
     });
 
-    transactions.forEach(transaction => {
+    transactions.forEach((transaction: any) => {
       if (data.length === 0) {
         data.push({
           date: transaction.date,
@@ -33,11 +33,12 @@ angular.module('financier').factory('netWorth', () => {
       data[data.length - 1].accounts[transaction.account] += transaction.value;
     });
 
-    const months = [],
-      assets = [],
-      debt = [],
-      netWorth = [];
+    const months: any = [],
+      assets: any = [],
+      debt: any = [],
+      netWorth: any = [];
 
+    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'd' implicitly has an 'any' type.
     data.forEach(d => {
       months.push(d.date);
 
@@ -71,14 +72,14 @@ angular.module('financier').factory('netWorth', () => {
 
   };
 
-  function isSameMonth(a, b) {
+  function isSameMonth(a: any, b: any) {
     return (
       a.getFullYear() === b.getFullYear() &&
       a.getMonth() === b.getMonth()
     );
   }
 
-  function nextMonth(month) {
+  function nextMonth(month: any) {
     return new Date(month.getFullYear(), month.getMonth() + 1, 1);
   }
 });

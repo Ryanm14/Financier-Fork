@@ -4,11 +4,12 @@ angular.module('financier').directive('resizeCategories', () => {
     link: (scope, element) => {
       let currentSize = +localStorage.budgetCategoryWidth;
 
-      function setSize(x) {
+      function setSize(x: any) {
         if (currentSize !== x) {
           localStorage.budgetCategoryWidth = x;
         }
 
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'styles' does not exist on type 'IScope'.
         scope.styles['flex-basis'] = `${x}px`;
       }
 

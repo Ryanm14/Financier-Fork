@@ -3,13 +3,17 @@ angular.module('financier').factory('BudgetOpened', () => {
    * Represents a BudgetOpened
    */
   class BudgetOpened {
+    _data: any;
+    _opened: any;
+    fn: any;
+    id: any;
 
     /**
      * Create a BudgetOpened
      *
      * @param {object} [data] - The record object from the database
      */
-    constructor(data) {
+    constructor(data: any) {
       this.id = data._id.slice(data._id.lastIndexOf('_') + 1);
 
 
@@ -79,7 +83,7 @@ angular.module('financier').factory('BudgetOpened', () => {
      * @param {function} fn - This function will be invoked upon record
      * changes with the Category object as the first parameter.
     */
-    subscribe(fn) {
+    subscribe(fn: any) {
       this.fn = fn;
     }
 
@@ -101,7 +105,7 @@ angular.module('financier').factory('BudgetOpened', () => {
      *
      * @type {string}
     */
-    set _rev(r) {
+    set _rev(r: any) {
       this._data._rev = r;
     }
 
@@ -149,7 +153,7 @@ angular.module('financier').factory('BudgetOpened', () => {
      * @returns {boolean} True if document _id is in the budget
      * as an account.
      */
-    static contains(_id) {
+    static contains(_id: any) {
       return _id > this.startKey && _id < this.endKey;
     }
   }

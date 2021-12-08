@@ -1,5 +1,5 @@
-angular.module('financier').factory('masterCategory', (category, uuid) => {
-  return budgetId => {
+angular.module('financier').factory('masterCategory', (category: any, uuid: any) => {
+  return (budgetId: any) => {
     // const Category = category(budgetId);
 
     /**
@@ -8,13 +8,17 @@ angular.module('financier').factory('masterCategory', (category, uuid) => {
      * @extends Category
      */
     class MasterCategory {
+      _categories: any;
+      _data: any;
+      fn: any;
+      id: any;
 
       /**
        * Create a MasterCategory
        *
        * @param {object} [data] - The record object from the database
        */
-      constructor(data) {
+      constructor(data: any) {
         const myData = angular.extend({
           name: 'New master category',
           _id: MasterCategory.prefix + uuid(),
@@ -108,11 +112,11 @@ angular.module('financier').factory('masterCategory', (category, uuid) => {
         this._categories = arr;
       }
 
-      addCategory(cat) {
+      addCategory(cat: any) {
         this._categories.push(cat);
 
         const sort = () => {
-          this._categories.sort((a, b) => a.sort - b.sort);
+          this._categories.sort((a: any, b: any) => a.sort - b.sort);
         };
 
         sort();
@@ -120,7 +124,7 @@ angular.module('financier').factory('masterCategory', (category, uuid) => {
         cat.subscribeSortChange(sort);
       }
 
-      removeCategory(cat) {
+      removeCategory(cat: any) {
         const index = this._categories.indexOf(cat);
 
         if (index !== -1) {
@@ -183,7 +187,7 @@ angular.module('financier').factory('masterCategory', (category, uuid) => {
        * @param {function} fn - This function will be invoked upon record
        * changes with the Category object as the first parameter.
       */
-      subscribe(fn) {
+      subscribe(fn: any) {
         this.fn = fn;
       }
 
@@ -231,7 +235,7 @@ angular.module('financier').factory('masterCategory', (category, uuid) => {
        * @returns {boolean} True if document _id is in the budget
        * as a MasterCategory.
        */
-      static contains(_id) {
+      static contains(_id: any) {
         return _id > this.startKey && _id < this.endKey;
       }
     }

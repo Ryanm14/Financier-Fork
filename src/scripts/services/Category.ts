@@ -1,16 +1,22 @@
-angular.module('financier').factory('category', uuid => {
-  return budgetId => {
+angular.module('financier').factory('category', (uuid: any) => {
+  return (budgetId: any) => {
     /**
      * Represents a Category, contained within a MasterCategory
      */
     class Category {
+      _data: any;
+      fn: any;
+      id: any;
+      masterCategoryAfterFn: any;
+      masterCategoryBeforeFn: any;
+      sortFn: any;
 
       /**
        * Create a Category
        *
        * @param {object} [data] - The record object from the database
        */
-      constructor(data) {
+      constructor(data: any) {
         const myData = angular.extend({
           name: 'New category',
           masterCategory: null,
@@ -64,7 +70,7 @@ angular.module('financier').factory('category', uuid => {
         }
       }
 
-      setMasterAndSort(masterCategory, i) {
+      setMasterAndSort(masterCategory: any, i: any) {
         const saveFn = this.fn;
         this.fn = null;
 
@@ -152,7 +158,7 @@ angular.module('financier').factory('category', uuid => {
        * @param {function} fn - This function will be invoked upon record
        * changes with the Category object as the first parameter.
       */
-      subscribe(fn) {
+      subscribe(fn: any) {
         this.fn = fn;
       }
 
@@ -171,7 +177,7 @@ angular.module('financier').factory('category', uuid => {
        * @param {function} fn - This function will be invoked upon record
        * changes with the Category object as the first parameter.
       */
-      subscribeSortChange(fn) {
+      subscribeSortChange(fn: any) {
         this.sortFn = fn;
       }
 
@@ -181,7 +187,7 @@ angular.module('financier').factory('category', uuid => {
        * @param {function} fn - This function will be invoked upon record
        * changes with the Category object as the first parameter.
       */
-      subscribeMasterCategoryChange(before, after) {
+      subscribeMasterCategoryChange(before: any, after: any) {
         this.masterCategoryBeforeFn = before;
         this.masterCategoryAfterFn = after;
       }
@@ -200,7 +206,7 @@ angular.module('financier').factory('category', uuid => {
        *
        * @private
       */
-      emitMasterCategoryChange(fn) {
+      emitMasterCategoryChange(fn: any) {
         this.masterCategoryBeforeFn(this);
 
         fn();
@@ -280,7 +286,7 @@ angular.module('financier').factory('category', uuid => {
        * @returns {boolean} True if document _id is in the budget
        * as an category.
        */
-      static contains(_id) {
+      static contains(_id: any) {
         return _id > this.startKey && _id < this.endKey;
       }
     }

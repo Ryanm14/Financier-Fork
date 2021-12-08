@@ -1,6 +1,33 @@
 import moment from 'moment';
 
-angular.module('financier').controller('dbCtrl', function (exportCsv, monthManager, MonthCategory, category, account, transaction, payee, masterCategory, db, budgetRecord, data, $stateParams, $scope, $q, month, ngDialog, myBudget, budgetOpenedRecord, currencies, $timeout, $state, $translate, $filter, backup) {
+// @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
+angular.module('financier').controller('dbCtrl', function(
+  this: any,
+  exportCsv,
+  monthManager,
+  MonthCategory,
+  category,
+  account,
+  transaction,
+  payee,
+  masterCategory,
+  db,
+  budgetRecord,
+  data,
+  $stateParams,
+  $scope,
+  $q,
+  month,
+  ngDialog,
+  myBudget,
+  budgetOpenedRecord,
+  currencies,
+  $timeout,
+  $state,
+  $translate,
+  $filter,
+  backup
+) {
   const that = this;
 
   const dateFilter = $filter('date');
@@ -38,10 +65,12 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     });
   };
 
-  this.accountFilteredExport = output => {
+  this.accountFilteredExport = (output: any) => {
     var tmpoutput = {};
     for (var i in output) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       if (!tmpoutput[output[i].id]) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         tmpoutput[output[i].id] = output[i];
       }
     }
@@ -59,7 +88,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     });
   };
 
-  this.getTransactionHeight = trans => {
+  this.getTransactionHeight = (trans: any) => {
     const unitHeight = 30; // one "row" of transaction table
     let rows;
 
@@ -74,7 +103,8 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     return unitHeight * rows;
   };
 
-  function _removeEmojis(str) {
+  function _removeEmojis(str: any) {
+    // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
     if (angular.isString(str)) {
       return str.replace(/([#0-9]\u20E3)|[\xA9\xAE\u203C\u2047-\u2049\u2122\u2139\u3030\u303D\u3297\u3299][\uFE00-\uFEFF]?|[\u2190-\u21FF][\uFE00-\uFEFF]?|[\u2300-\u23FF][\uFE00-\uFEFF]?|[\u2460-\u24FF][\uFE00-\uFEFF]?|[\u25A0-\u25FF][\uFE00-\uFEFF]?|[\u2600-\u27BF][\uFE00-\uFEFF]?|[\u2900-\u297F][\uFE00-\uFEFF]?|[\u2B00-\u2BF0][\uFE00-\uFEFF]?|(?:\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDEFF])[\uFE00-\uFEFF]?/g, '').trim();
     }
@@ -83,23 +113,23 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
   }
 
   this.customSorts = {
-    account(transaction) {
+    account(transaction: any) {
       return _removeEmojis(manager.getAccount(transaction.account).name);
     },
-    date(transaction) {
+    date(transaction: any) {
       // Sort by date and then value
       return transaction.date.getTime() + transaction.value;
     },
-    checkNumber(transaction) {
+    checkNumber(transaction: any) {
       return +transaction.checkNumber || transaction.checkNumber;
     },
-    category(transaction) {
+    category(transaction: any) {
       return _removeEmojis(that.getCategoryName(transaction.category, transaction.date)) || '';
     },
-    payee(transaction) {
+    payee(transaction: any) {
       return (transaction.transfer ? _removeEmojis($scope.dbCtrl.getAccountName(transaction.transfer.account)) : _removeEmojis(that.getPayeeName(transaction.payee))) || '';
     },
-    cleared(transaction) {
+    cleared(transaction: any) {
       if (transaction.reconciled) {
         return 2;
       } else if (transaction.cleared) {
@@ -108,26 +138,26 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
 
       return 0;
     },
-    outflow(transaction) {
+    outflow(transaction: any) {
       return -transaction.value;
     },
-    inflow(transaction) {
+    inflow(transaction: any) {
       return transaction.value;
     },
-    flag(transaction) {
+    flag(transaction: any) {
       return transaction.flag || '';
     }
   };
 
   this.filterAccounts = () => {
-    const bySort = (a, b) => a.sort - b.sort;
+    const bySort = (a: any, b: any) => a.sort - b.sort;
 
-    this.onBudgetAccounts = this.accounts.filter(acc => acc.onBudget && !acc.closed).sort(bySort);
-    this.offBudgetAccounts = this.accounts.filter(acc => !acc.onBudget && !acc.closed).sort(bySort);
-    this.closedAccounts = this.accounts.filter(acc => acc.closed).sort(bySort);
+    this.onBudgetAccounts = this.accounts.filter((acc: any) => acc.onBudget && !acc.closed).sort(bySort);
+    this.offBudgetAccounts = this.accounts.filter((acc: any) => !acc.onBudget && !acc.closed).sort(bySort);
+    this.closedAccounts = this.accounts.filter((acc: any) => acc.closed).sort(bySort);
   };
 
-  this.totalAccountsBalance = accounts => {
+  this.totalAccountsBalance = (accounts: any) => {
     let total = 0;
 
     for (let i = 0; i < accounts.length; i++) {
@@ -137,13 +167,14 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     return total;
   };
 
-  this.removeAccount = account => {
+  this.removeAccount = (account: any) => {
     // require all transactions in account to first be removed
     if (account.transactions.length) {
       const s = $scope.$new({});
       s.totalTransactions = account.transactions.length;
 
       ngDialog.open({
+        // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
         template: require('../../views/modal/accountRemoveHasTransactions.html'),
         scope: s
       });
@@ -187,6 +218,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
       return this._offBudgetAccountsCollapsed === 'true';
     },
     set offBudgetAccounts(s) {
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'boolean' is not assignable to pa... Remove this comment to see the full error message
       localStorage.setItem('offBudgetAccountsCollapsed', s);
       this._offBudgetAccountsCollapsed = localStorage.getItem('offBudgetAccountsCollapsed');
     },
@@ -194,6 +226,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
       return this._closedAccountsCollapsed === 'true';
     },
     set closedAccounts(s) {
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'boolean' is not assignable to pa... Remove this comment to see the full error message
       localStorage.setItem('closedAccountsCollapsed', s);
       this._closedAccountsCollapsed = localStorage.getItem('closedAccountsCollapsed');
     },
@@ -201,6 +234,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
       return this._monthOverviewCollapsed === 'true';
     },
     set monthOverview(s) {
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'boolean' is not assignable to pa... Remove this comment to see the full error message
       localStorage.setItem('monthOverviewCollapsed', s);
       this._monthOverviewCollapsed = localStorage.getItem('monthOverviewCollapsed');
     }
@@ -234,7 +268,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
   this.accountSortable = {
     animation: 200,
     ghostClass: 'app-view__account--ghost',
-    onSort: e => {
+    onSort: (e: any) => {
       // wait for the array to update
       $timeout(() => {
         for (let i = 0; i < e.models.length; i++) {
@@ -247,7 +281,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     }
   };
 
-  this.getCategoryName = (id, transactionDate) => {
+  this.getCategoryName = (id: any, transactionDate: any) => {
     if (id === 'income') {
       return $translate.instant('INCOME_FOR', { month: dateFilter(moment(transactionDate).toDate(), 'MMMM') });
     } else if (id === 'incomeNextMonth') {
@@ -259,7 +293,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     return this.categories[id] && this.categories[id].name;
   };
 
-  this.getAccountName = id => {
+  this.getAccountName = (id: any) => {
     for (let i = 0; i < this.accounts.length; i++) {
       if (this.accounts[i].id === id) {
         return this.accounts[i].name;
@@ -269,11 +303,11 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     return id;
   };
 
-  this.getPayeeName = id => {
+  this.getPayeeName = (id: any) => {
     return (payees[id] && payees[id].name) || id;
   };
 
-  this.getSplitPayeeName = trans => {
+  this.getSplitPayeeName = (trans: any) => {
     var payee = this.getPayeeName(trans.payee);
 
     if (trans.constructorName === 'SplitTransaction') {
@@ -289,7 +323,8 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
 
   $scope.$watch(
     () => this.currentMonth,
-    currentMonth => {
+    (currentMonth: any) => {
+      // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
       if (angular.isDefined(currentMonth)) {
         this.months = getView(currentMonth.toDate ? currentMonth.toDate() : currentMonth);
 
@@ -301,18 +336,18 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     }
   );
 
-  this.removeCategory = cat => {
+  this.removeCategory = (cat: any) => {
     delete this.categories[cat.id];
 
     this.masterCategories[cat.masterCategory].removeCategory(cat);
   };
 
-  this.addCategory = cat => {
+  this.addCategory = (cat: any) => {
     this.categories[cat.id] = cat;
 
-    cat.subscribeMasterCategoryChange(cat => {
+    cat.subscribeMasterCategoryChange((cat: any) => {
       this.removeCategory(cat);
-    }, cat => {
+    }, (cat: any) => {
       this.addCategory(cat);
     });
 
@@ -347,6 +382,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     //   masterCat = tmpMasterCat;
     // }
 
+    // @ts-expect-error ts-migrate(2686) FIXME: 'angular' refers to a UMD global, but the current ... Remove this comment to see the full error message
     if (angular.isDefined(sort)) {
       cat.setMasterAndSort(masterCat.id, sort);
     } else {
@@ -371,7 +407,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     }
   }
 
-  function getView(date) {
+  function getView(date: any) {
     // Make sure that we have the months
     manager.getMonth(date);
     const dateUntil = moment(date).add(5, 'months').toDate();
@@ -387,8 +423,9 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     throw new Error('Could not find base month in database!');
   }
 
-  this.createAccount = account => {
+  this.createAccount = (account: any) => {
     ngDialog.open({
+      // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
       template: require('../../views/modal/createAccount.html'),
       controller: 'createAccountCtrl',
       controllerAs: 'createAccountCtrl',
@@ -407,7 +444,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     });
   };
 
-  this.stopPropagation = event => {
+  this.stopPropagation = (event: any) => {
     event.stopPropagation();
 
     $scope.$broadcast('drop:close');
@@ -418,17 +455,19 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     this.sidebarInitialWidth = +lastWidth;
   }
 
-  $scope.$on('angular-resizable.resizeEnd', (e, { width }) => {
+  $scope.$on('angular-resizable.resizeEnd', (e: any, {
+    width
+  }: any) => {
     localStorage.setItem('sidebarWidth', width);
   });
 
 
-  function getId(_id) {
+  function getId(_id: any) {
     return _id.slice(_id.lastIndexOf('_') + 1);
   }
 
   const doChange = {
-    masterCategory(change) {
+    masterCategory(change: any) {
       // look through our categories to see if it exists
 
       const cat = that.masterCategories[getId(change.id)];
@@ -462,7 +501,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
         $scope.$broadcast('masterCategories:change');
       }
     },
-    category(change) {
+    category(change: any) {
       // look through our categories to see if it exists
 
       const cat = that.categories[getId(change.id)];
@@ -484,7 +523,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
         }
       }
     },
-    payee(change) {
+    payee(change: any) {
       // look through our categories to see if it exists
 
       const myPayee = payees[getId(change.id)];
@@ -508,7 +547,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     month() {
       // TODO
     },
-    monthCategory(change) {
+    monthCategory(change: any) {
       if (change.deleted) {
         const moCat = new MonthCategory(change.doc);
         const mo = manager.getMonth(MonthManager._dateIDToDate(moCat.monthId));
@@ -530,7 +569,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
         }
       }
     },
-    account(change) {
+    account(change: any) {
       for (let i = 0; i < manager.accounts.length; i++) {
         if (manager.accounts[i]._id === change.id) {
           if (change.deleted) {
@@ -556,7 +595,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
       }
 
     },
-    transaction(change) {
+    transaction(change: any) {
       let trans = manager.transactions[getId(change.id)];
 
       if (trans) {
@@ -573,7 +612,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
 
           trans.data = change.doc;
 
-          trans.splits.forEach(split => {
+          trans.splits.forEach((split: any) => {
             split.transfer = manager.transactions[split.data.transfer];
 
             if (split.transfer) {
@@ -600,7 +639,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
           }
         }
 
-        trans.splits.forEach(split => {
+        trans.splits.forEach((split: any) => {
           split.transfer = manager.transactions[split.data.transfer];
 
           if (split.transfer) {
@@ -608,7 +647,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
           }
         });
 
-        trans.splits.forEach(split => {
+        trans.splits.forEach((split: any) => {
           manager.addTransaction(split);
         });
       }
@@ -616,12 +655,13 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
     }
   };
 
-  $scope.$on('pouchdb:change', (e, change) => {
+  $scope.$on('pouchdb:change', (e: any, change: any) => {
     if (MasterCategory.contains(change.id)) {
       doChange.masterCategory(change);
     } else if (Category.contains(change.id)) {
       doChange.category(change);
     } else if (Month.contains(change.id)) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
       doChange.month(change);
     } else if (MonthCategory.contains(budgetId, change.id)) {
       doChange.monthCategory(change);

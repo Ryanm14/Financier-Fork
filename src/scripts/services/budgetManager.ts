@@ -1,18 +1,18 @@
 angular.module('financier').factory('budgetManager', (
-  month,
-  account,
-  category,
-  transaction,
-  masterCategory,
-  monthManager,
-  payee,
-  uuid,
-  $q,
-  $translate,
-  MonthCategory,
-  defaultCategories) => {
+  month: any,
+  account: any,
+  category: any,
+  transaction: any,
+  masterCategory: any,
+  monthManager: any,
+  payee: any,
+  uuid: any,
+  $q: any,
+  $translate: any,
+  MonthCategory: any,
+  defaultCategories: any) => {
 
-  return (pouch, budgetId) => {
+  return (pouch: any, budgetId: any) => {
     const Month = month(budgetId);
     const Account = account(budgetId);
     const Category = category(budgetId);
@@ -38,8 +38,8 @@ angular.module('financier').factory('budgetManager', (
         endkey: `b_${budgetId}_\uffff`,
         include_docs: true
       })
-      .then(res => {
-        return pouch.bulkDocs(res.rows.map(row => {
+      .then((res: any) => {
+        return pouch.bulkDocs(res.rows.map((row: any) => {
           return {
             _id: row.doc._id,
             _rev: row.doc._rev,
@@ -49,8 +49,8 @@ angular.module('financier').factory('budgetManager', (
       });
     }
 
-    function put(o) {
-      return pouch.put(o.toJSON()).then(res => {
+    function put(o: any) {
+      return pouch.put(o.toJSON()).then((res: any) => {
         o.data._rev = res.rev;
       });
     }
@@ -64,7 +64,7 @@ angular.module('financier').factory('budgetManager', (
           include_docs: true,
           startkey: Account.startKey,
           endkey: Account.endKey
-        }).then(res => {
+        }).then((res: any) => {
           const accounts = [];
 
           for (let i = 0; i < res.rows.length; i++) {
@@ -77,9 +77,9 @@ angular.module('financier').factory('budgetManager', (
         });
       }
 
-      function get(accountId) {
+      function get(accountId: any) {
         return pouch.get(Account.prefix + accountId)
-        .then(acc => {
+        .then((acc: any) => {
           return new Account(acc);
         });
       }
@@ -96,12 +96,13 @@ angular.module('financier').factory('budgetManager', (
           include_docs: true,
           startkey: MasterCategory.startKey,
           endkey: MasterCategory.endKey
-        }).then(res => {
+        }).then((res: any) => {
           const ret = {};
 
           for (let i = 0; i < res.rows.length; i++) {
             const cat = new MasterCategory(res.rows[i].doc);
             cat.subscribe(put);
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             ret[cat.id] = cat;
           }
 
@@ -121,12 +122,13 @@ angular.module('financier').factory('budgetManager', (
           include_docs: true,
           startkey: Category.startKey,
           endkey: Category.endKey
-        }).then(res => {
+        }).then((res: any) => {
           const ret = {};
 
           for (let i = 0; i < res.rows.length; i++) {
             const cat = new Category(res.rows[i].doc);
             cat.subscribe(put);
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             ret[cat.id] = cat;
           }
 
@@ -146,12 +148,13 @@ angular.module('financier').factory('budgetManager', (
           include_docs: true,
           startkey: Payee.startKey,
           endkey: Payee.endKey
-        }).then(res => {
+        }).then((res: any) => {
           const ret = {};
 
           for (let i = 0; i < res.rows.length; i++) {
             const myPayee = new Payee(res.rows[i].doc);
             myPayee.subscribe(put);
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             ret[myPayee.id] = myPayee;
           }
 
@@ -196,8 +199,8 @@ angular.module('financier').factory('budgetManager', (
           startkey: MonthCategory.startKey(budgetId),
           endkey: MonthCategory.endKey(budgetId)
         })
-        .then(res => {
-          return res.rows.map(row => {
+        .then((res: any) => {
+          return res.rows.map((row: any) => {
             const bValue = new MonthCategory(row.doc);
             bValue.subscribe(put);
 
@@ -212,8 +215,8 @@ angular.module('financier').factory('budgetManager', (
           startkey: Account.startKey,
           endkey: Account.endKey
         })
-        .then(res => {
-          return res.rows.map(row => {
+        .then((res: any) => {
+          return res.rows.map((row: any) => {
             const acc = new Account(row.doc);
             acc.subscribe(put);
 
@@ -228,7 +231,7 @@ angular.module('financier').factory('budgetManager', (
           startkey: Transaction.startKey,
           endkey: Transaction.endKey
         })
-        .then(res => {
+        .then((res: any) => {
           const transactions = {};
 
           for (let i = 0; i < res.rows.length; i++) {
@@ -237,20 +240,25 @@ angular.module('financier').factory('budgetManager', (
             // Add transaction splits
             if (trans.splits.length) {
               for (let j = 0; j < trans.splits.length; j++) {
+                // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 transactions[trans.splits[j].id] = trans.splits[j];
               }
             }
 
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             transactions[trans.id] = trans;
           }
 
           return Object.keys(transactions).map(key => {
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             const trans = transactions[key];
 
             if (trans.data.transfer) {
+              // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
               trans.transfer = transactions[trans.data.transfer];
             }
 
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             return transactions[key];
           });
         });
@@ -261,25 +269,25 @@ angular.module('financier').factory('budgetManager', (
           include_docs: true, /* eslint camelcase:0 */
           startkey: Month.startKey,
           endkey: Month.endKey
-        }).then(res => {
-          const months = res.rows.map(row => new Month(row.doc, put));
+        }).then((res: any) => {
+          const months = res.rows.map((row: any) => new Month(row.doc, put));
 
           const manager = new MonthManager(months, put);
 
           return getAllMonthCategories()
-          .then(monthCatVals => {
+          .then((monthCatVals: any) => {
             for (let i = 0; i < monthCatVals.length; i++) {
               manager.addMonthCategory(monthCatVals[i]);
             }
 
             return getAllAccounts()
-            .then(accounts => {
+            .then((accounts: any) => {
               for (let i = 0; i < accounts.length; i++) {
                 manager.addAccount(accounts[i]);
               }
 
               return getAllTransactions()
-              .then(transactions => {
+              .then((transactions: any) => {
                 for (let i = 0; i < transactions.length; i++) {
                   manager.addTransaction(transactions[i]);
                 }

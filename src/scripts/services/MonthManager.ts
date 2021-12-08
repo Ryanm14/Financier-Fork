@@ -1,5 +1,5 @@
-angular.module('financier').factory('monthManager', (month, account) => {
-  return budgetId => {
+angular.module('financier').factory('monthManager', (month: any, account: any) => {
+  return (budgetId: any) => {
 
     const Month = month(budgetId);
     const Account = account(budgetId);
@@ -9,6 +9,12 @@ angular.module('financier').factory('monthManager', (month, account) => {
      * creating and linking Month objects together.
      */
     class MonthManager {
+      accounts: any;
+      allAccounts: any;
+      categoryIds: any;
+      months: any;
+      saveFn: any;
+      transactions: any;
 
       /**
        * Create a MonthManager.
@@ -17,12 +23,13 @@ angular.module('financier').factory('monthManager', (month, account) => {
        * @param {function} saveFn - The function that will take a serializable object
        * to save to the database. After complete, it will set `_rev` on the object.
        */
-      constructor(months = [], saveFn) {
+      constructor(months = [], saveFn: any) {
         // Months need to be ordered
         // Seriously, else it'll be broke af
         if (months.length === 0) {
           // my first time, be gentle
 
+          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
           months.push(new Month(Month.createID(new Date()), saveFn));
         }
 
@@ -48,16 +55,16 @@ angular.module('financier').factory('monthManager', (month, account) => {
        *
        * @param {Transaction} trans - The Transaction to be added.
        */
-      addTransaction(trans) {
+      addTransaction(trans: any) {
         const myMonth = this.getMonth(trans.month),
           myAccount = this.getAccount(trans.account);
 
         trans.subscribe(this.saveFn);
 
-        trans.removeTransaction = t => this.removeTransaction(t);
-        trans.addTransaction = t => this.addTransaction(t);
+        trans.removeTransaction = (t: any) => this.removeTransaction(t);
+        trans.addTransaction = (t: any) => this.addTransaction(t);
 
-        trans.subscribeAccountChange((newAccountId, oldAccountId) => {
+        trans.subscribeAccountChange((newAccountId: any, oldAccountId: any) => {
           const oldAccount = this.getAccount(oldAccountId),
             currentMonth = this.getMonth(trans.month);
 
@@ -96,7 +103,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
           }
         });
 
-        trans.subscribeMonthChange((newMonth, oldMonth) => {
+        trans.subscribeMonthChange((newMonth: any, oldMonth: any) => {
           const m = this.getMonth(newMonth);
           const account = this.getAccount(trans.account);
 
@@ -123,7 +130,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        *
        * @param {Transaction} trans - The Transaction to be removed.
        */
-      removeTransaction(trans) {
+      removeTransaction(trans: any) {
         const transactions = [trans];
 
         if (trans.transfer) {
@@ -133,7 +140,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
         transactions.forEach(transaction => {
           if (this.transactions[transaction.id]) {
             if (transaction.splits && transaction.splits.length) {
-              transaction.splits.forEach(split => {
+              transaction.splits.forEach((split: any) => {
                 this.removeTransaction(split);
               });
             }
@@ -166,7 +173,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        *
        * @param {MonthCategory} monthCat - The MonthCategory to be added.
        */
-      addMonthCategory(monthCat) {
+      addMonthCategory(monthCat: any) {
         this.getMonth(MonthManager._dateIDToDate(monthCat.monthId)).addBudget(monthCat);
       }
 
@@ -185,7 +192,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        * // [Feb, Apr, May, Aug] => [Feb, Mar, Apr, May, Jun, Jul, Aug]
        * @private
        */
-      _fillMonthGaps(months) {
+      _fillMonthGaps(months: any) {
         // This function needs to fill gaps of months
         // We can already assume the months are in order,
         // as promised by CouchDB/PouchDB
@@ -232,7 +239,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        * that month.
        * @returns {Month} The Month in which the month represents.
        */
-      getMonth(date) {
+      getMonth(date: any) {
         const diff = MonthManager._diff(MonthManager._dateIDToDate(this.months[0].date), date);
 
         if ((diff + 1) > this.months.length) {
@@ -278,7 +285,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
         return this.months[diff];
       }
 
-      getAccount(id) {
+      getAccount(id: any) {
         for (let i = 0; i < this.accounts.length; i++) {
           if (this.accounts[i].id === id) {
             return this.accounts[i];
@@ -286,13 +293,13 @@ angular.module('financier').factory('monthManager', (month, account) => {
         }
       }
 
-      addAccount(acc) {
+      addAccount(acc: any) {
         acc.subscribe(this.saveFn);
 
         this.accounts.push(acc);
       }
 
-      removeAccount(acc) {
+      removeAccount(acc: any) {
         const index = this.accounts.indexOf(acc);
 
         for (let i = 0; i < acc.transactions.length; i++) {
@@ -320,7 +327,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        * @param {Month} secondMonth - The later month.
        * @private
        */
-      _linkMonths(firstMonth, secondMonth) {
+      _linkMonths(firstMonth: any, secondMonth: any) {
         firstMonth.subscribeNextMonth(secondMonth);
       }
 
@@ -331,7 +338,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        * @param {string[]} categoryIds - The category `_id`s in which to
        * propagate balances, etc. Does not include MasterCategory objects.
        */
-      propagateRolling(categoryIds) {
+      propagateRolling(categoryIds: any) {
         this.categoryIds = categoryIds;
 
         for (var i = 0; i < categoryIds.length; i++) {
@@ -350,7 +357,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        * @param {Month} month - The Month object to propagate from.
        * @private
        */
-      _propagateRollingFromMonth(month) {
+      _propagateRollingFromMonth(month: any) {
         // if categoryIds is not set,
         // we're probably going to call this.propagateRolling
         // in the future, so doing this is moot...
@@ -369,7 +376,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        * @returns {number} The months between the two dates.
        * @private
        */
-      static _diff(d1, d2) {
+      static _diff(d1: any, d2: any) {
         let months;
 
         months = (d2.getFullYear() - d1.getFullYear()) * 12;
@@ -386,7 +393,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        * @returns {date} The Month date object.
        * @private
        */
-      static _dateIDToDate(date) {
+      static _dateIDToDate(date: any) {
         const [year, month] = date.split('-');
         return new Date(year, month - 1, 1);
       }
@@ -400,7 +407,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        * @returns {string} The next Month date ID.
        * @private
        */
-      static _nextDateID(date) {
+      static _nextDateID(date: any) {
         const [year, month] = date.split('-');
         return Month.createID(new Date(year, month, 1));
       }
@@ -414,7 +421,7 @@ angular.module('financier').factory('monthManager', (month, account) => {
        * @returns {string} The previous Month date ID.
        * @private
        */
-      static _previousDateID(date) {
+      static _previousDateID(date: any) {
         const [year, month] = date.split('-');
         return Month.createID(new Date(year, month - 2, 1));
       }

@@ -1,4 +1,4 @@
-angular.module('financier').controller('masterCategoryCtrl', function ($scope) {
+angular.module('financier').controller('masterCategoryCtrl', function(this: any, $scope) {
   // TODO improve this -- move calculation to the Month service
   // Doesn't seem to make performance suck at the moment, and O(1) w/
   // growing db size (just the view calc), so I'll keep it for now...
@@ -22,6 +22,7 @@ angular.module('financier').controller('masterCategoryCtrl', function ($scope) {
     }
 
     return [budget, outflow, balance];
+  // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'budget' implicitly has an 'any' t... Remove this comment to see the full error message
   }, ([budget, outflow, balance]) => {
     this.budget = budget;
     this.outflow = outflow;

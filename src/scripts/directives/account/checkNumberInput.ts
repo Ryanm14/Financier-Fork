@@ -24,6 +24,7 @@ angular.module('financier').directive('checkNumberInput', $rootScope => {
               let checkNumber = getCurrentCheckNumber();
 
               if (!isNaN(checkNumber)) {
+                // @ts-expect-error ts-migrate(2339) FIXME: Property 'checkNumber' does not exist on type 'ISc... Remove this comment to see the full error message
                 scope.checkNumber = ++checkNumber;
               }
 
@@ -34,6 +35,7 @@ angular.module('financier').directive('checkNumberInput', $rootScope => {
               let checkNumber = getCurrentCheckNumber();
 
               if (!isNaN(checkNumber)) {
+                // @ts-expect-error ts-migrate(2339) FIXME: Property 'checkNumber' does not exist on type 'ISc... Remove this comment to see the full error message
                 scope.checkNumber = --checkNumber;
               }
 
@@ -44,16 +46,20 @@ angular.module('financier').directive('checkNumberInput', $rootScope => {
           });
 
           function getCurrentCheckNumber() {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'checkNumber' does not exist on type 'ISc... Remove this comment to see the full error message
             const thisCheckNumber = +scope.checkNumber;
 
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'checkNumber' does not exist on type 'ISc... Remove this comment to see the full error message
             if (scope.checkNumber != null && !isNaN(thisCheckNumber)) {
               return thisCheckNumber;
             }
 
             let foundCheckNumber = 0;
 
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'transactions' does not exist on type 'IS... Remove this comment to see the full error message
             if (scope.transactions) {
-              scope.transactions.forEach(transaction => {
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'transactions' does not exist on type 'IS... Remove this comment to see the full error message
+              scope.transactions.forEach((transaction: any) => {
                 const checkNumber = +transaction.checkNumber;
 
                 if (!isNaN(checkNumber) && checkNumber > foundCheckNumber) {

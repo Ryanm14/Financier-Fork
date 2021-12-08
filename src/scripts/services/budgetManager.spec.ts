@@ -1,14 +1,17 @@
+// @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'describe'. Do you need to instal... Remove this comment to see the full error message
 describe('budgetManager', function () {
-  let db, budgetManager, month, account, Month, Account;
+  let db: any, budgetManager: any, month, account, Month: any, Account: any;
 
   // a random budget uuid to test with
   const UUID = '555-555-555-555';
 
-  beforeEach(angular.mock.module('financier', dbProvider => {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'beforeEach'.
+  beforeEach(angular.mock.module('financier', (dbProvider: any) => {
     dbProvider.adapter = 'memory';
   }));
 
-  beforeEach(inject((_db_, _budgetManager_, _month_, _account_) => {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'beforeEach'.
+  beforeEach(inject((_db_: any, _budgetManager_: any, _month_: any, _account_: any) => {
     db = _db_;
     budgetManager = _budgetManager_;
     month = _month_;
@@ -18,27 +21,36 @@ describe('budgetManager', function () {
     Account = account(UUID);
   }));
 
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'afterEach'.
   afterEach(() => {
     return db._pouch.destroy();
   });
 
 
+  // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
   it('should return a function', () => {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
     expect(typeof budgetManager).toBe('function');
   });
 
+  // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'describe'. Do you need to instal... Remove this comment to see the full error message
   describe('budget', () => {
-    let budget;
+    let budget: any;
 
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'beforeEach'.
     beforeEach(() => {
       budget = budgetManager(db._pouch, UUID);
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('should return an object', () => {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
       expect(typeof budget).toBe('object');
     });
     
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'describe'. Do you need to instal... Remove this comment to see the full error message
     describe('all', () => {
+      // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
       it('should return with Months', () => {
         return db._pouch.bulkDocs([{
           _id: 'b_555-555-555-555_month_' + Month.createID(new Date('1/1/15'))
@@ -47,16 +59,21 @@ describe('budgetManager', function () {
         }, {
           _id: 'b_555-555-555-555_month_' + Month.createID(new Date('3/1/15'))
         }]).then(() => {
-          return budget.budget().then(monthManager => {
+          return budget.budget().then((monthManager: any) => {
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
             expect(monthManager.months.length).toBe(3);
 
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
             expect(monthManager.months[0].constructor.name).toBe('Month');
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
             expect(monthManager.months[1].constructor.name).toBe('Month');
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
             expect(monthManager.months[2].constructor.name).toBe('Month');
           });
         });
       });
 
+      // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
       it('should update database', () => {
         return db._pouch.bulkDocs([{
           _id: 'b_555-555-555-555_month_' + Month.createID(new Date('1/1/15'))
@@ -65,26 +82,32 @@ describe('budgetManager', function () {
         }, {
           _id: 'b_555-555-555-555_month_' + Month.createID(new Date('3/1/15'))
         }]).then(() => {
-          return budget.budget().then(monthManager => {
+          return budget.budget().then((monthManager: any) => {
             monthManager.months[0].setBudget('123', 323);
 
             return db._pouch.get(`b_${UUID}_m_category_${monthManager.months[0].date}_123`)
-            .then(item => {
+            .then((item: any) => {
+              // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
               expect(item.budget).toBe(323);
             });
           });
         });
       });
 
+      // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
       it('put', () => {
         return budget.put(new Account({
           name: 'myNewAccount',
           type: 'CREDIT'
         })).then(() => {
-          return budget.accounts.all().then(accounts => {
+          return budget.accounts.all().then((accounts: any) => {
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
             expect(accounts[0].name).toBe('myNewAccount');
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
             expect(accounts[0].type).toBe('CREDIT');
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
             expect(accounts[0].data._id).toBeDefined();
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
             expect(accounts[0].data._id.indexOf('b_555-555-555-555_account_')).toBe(0);
           });
         });
@@ -92,42 +115,52 @@ describe('budgetManager', function () {
     });
   });
 
+  // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'describe'. Do you need to instal... Remove this comment to see the full error message
   describe('accounts', () => {
-    let budget;
+    let budget: any;
 
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'beforeEach'.
     beforeEach(() => {
       budget = budgetManager(db._pouch, UUID);
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('should get all that exist', () => {
       return db._pouch.bulkDocs([{
         _id: 'b_555-555-555-555_account_foo',
         name: 'foobar',
         type: 'CREDIT'
       }]).then(() => {
-        return budget.accounts.all().then(accounts => {
+        return budget.accounts.all().then((accounts: any) => {
+          // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
           expect(accounts.length).toBe(1);
 
+          // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
           expect(accounts[0].constructor.name).toBe('Account');
 
+          // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
           expect(accounts[0].data._id).toBe('b_555-555-555-555_account_foo');
+          // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
           expect(accounts[0].name).toBe('foobar');
+          // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
           expect(accounts[0].type).toBe('CREDIT');
         });
       });
     });
 
+    // @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'it'. Do you need to install type... Remove this comment to see the full error message
     it('should update database on name change', () => {
       db._pouch.bulkDocs([{
         _id: 'b_555-555-555-555_account_foo',
         name: 'foobar',
         type: 'CREDIT'
       }]).then(() => {
-        return budget.accounts.all().then(accounts => {
+        return budget.accounts.all().then((accounts: any) => {
 
           accounts[0].name = 'mynewname';
 
-          return db._pouch.get('b_555-555-555-555_account_foo').then(r => {
+          return db._pouch.get('b_555-555-555-555_account_foo').then((r: any) => {
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
             expect(r.name).toBe('mynewname');
           });
 
