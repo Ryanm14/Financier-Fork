@@ -6,3 +6,7 @@ docs/
 npm-debug.log
 .DS_Store
 .env
+
+#Currently for migration to .ts from .js
+flagCtrl.js
+flags.js
