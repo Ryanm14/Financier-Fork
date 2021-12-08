@@ -1,7 +1,18 @@
+import 'zone.js';
+import 'reflect-metadata';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { setAngularLib } from '@angular/upgrade/static';
+import * as angular from 'angular';
+import { AppModule } from './app.module';
+
+
+// @ts-ignore
 if (process.env.NODE_ENV === 'production') {
-  require('./selfxssWarning');
+    // @ts-ignore
+    require('./selfxssWarning');
 }
 
+// @ts-ignore
 import fastclick from 'fastclick';
 fastclick.attach(document.body);
 
@@ -24,3 +35,7 @@ import './app.controllers';
 import './app.directives';
 import './app.filters';
 import './app.services';
+
+
+setAngularLib(angular);
+platformBrowserDynamic().bootstrapModule(AppModule);

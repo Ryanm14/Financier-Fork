@@ -20,6 +20,7 @@ import 'angular-clipboard/angular-clipboard.js';
 import moment from 'moment';
 
 let financier = angular.module('financier', [
+  'ngRoute',
   uiRouter,
   ngAnimate,
   ngMessages,

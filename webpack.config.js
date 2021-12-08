@@ -18,7 +18,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: isTest ? null : {
-    app: './src/scripts/app.js'
+    app: './src/scripts/main.ts'
   },
 
   output: isTest ? {} : {
