@@ -1,3 +1,8 @@
+interface Flag {
+  color: string,
+  label: string
+}
+
 angular.module('financier').constant('flags', [{
     color: '#ff0000',
     label: 'RED'
