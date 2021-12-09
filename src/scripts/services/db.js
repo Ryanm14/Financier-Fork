@@ -1,4 +1,5 @@
 import PouchDB from 'pouchdb';
+import Cookies from 'universal-cookie';
 
 angular.module('financier').provider('db', function () {
   const that = this;
@@ -45,7 +46,12 @@ angular.module('financier').provider('db', function () {
       cancelSync();
 
       // const host = window.location.host;
-      const dbUrl = 'http://192.168.1.76:5984/fin';
+      // const dbUrl = 'http://192.168.1.76:5984/fin';
+      const dbUrl = new Cookies().get('dbUrl');
+      if (!dbUrl || dbUrl === 'undefined') {
+        return;
+      }
+
       isValidSub = true;
 
       if (isValidSub) {

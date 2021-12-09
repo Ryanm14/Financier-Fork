@@ -33,6 +33,7 @@ import './app.services';
 import {react2angular} from 'react2angular/index';
 import {BudgetSelectorList} from './budgetSelector/budgetSelectorList.jsx';
 import {BudgetSelector} from './budgetSelector/budgetSelector.jsx';
+import {DbUrlEditor} from './budgetSelector/dbUrlEditor.jsx';
 
 runConfig.$inject = ['$injector'];
 function runConfig($injector) {
@@ -44,4 +45,5 @@ function runConfig($injector) {
 angular.module('financier')
   .component('budgetSelectorList', react2angular(BudgetSelectorList))
   .component('budgetSelector', react2angular(BudgetSelector))
+  .component('dbUrlEditor', react2angular(DbUrlEditor))
   .run(runConfig);
