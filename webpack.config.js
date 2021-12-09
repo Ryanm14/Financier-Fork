@@ -44,10 +44,10 @@ module.exports = {
     rules: [
       // rules for modules (configure loaders, parser options, etc.)
       {
-        test: /\.js$/,
+        test: /\.js$|jsx/,
         exclude: /(node_modules)/,
         use: {
-          loader: 'babel-loader'
+          loader: 'babel-loader',
         }
       },
       {

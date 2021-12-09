@@ -1,4 +1,9 @@
-angular.module('financier').controller('flagCtrl', function (flags: Flag[]) {
-  //@ts-ignore
-  this.flags = flags;
-});
+class FlagsCtrl {
+  flags: Flag[];
+
+  constructor(flags: Flag[]) {
+    this.flags = flags;
+  }
+}
+
+angular.module('financier').controller('flagCtrl',FlagsCtrl);

@@ -10,3 +10,4 @@ npm-debug.log
 #Currently for migration to .ts from .js
 flagCtrl.js
 flags.js
+*.jsx

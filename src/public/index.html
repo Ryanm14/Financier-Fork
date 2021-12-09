@@ -118,13 +118,18 @@ html {
   </head>
 
   <body>
-    <div class="full-height" ui-view></div>
+    <div class="full-height" ui-view>
 
-    <div class="loader" ng-class="{'loader--loaded': loaded}">
-      <div>
-        <div class="loader__spinner"></div>
-        <div class="loader__text" translate="LOADING_FINANCIER">Loading Financier</div>
-      </div>
+
     </div>
+
+    <render-image></render-image>
+
+<!--    <div class="loader" ng-class="{'loader&#45;&#45;loaded': loaded}">-->
+<!--      <div>-->
+<!--        <div class="loader__spinner"></div>-->
+<!--        <div class="loader__text" translate="LOADING_FINANCIER">Loading Financier</div>-->
+<!--      </div>-->
+<!--    </div>-->
   </body>
 </html>
