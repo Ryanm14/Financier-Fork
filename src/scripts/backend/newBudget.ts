@@ -18,57 +18,43 @@ interface BudgetData {
 export class Budget {
 
     private fn: any;
-    private data: BudgetData;
-    private readonly id: string;
+    readonly id: string;
+    private DEFAULT_BUDGET: BudgetData = {
+        hintsOutflow: true,
+        name: '',
+        currency: 'USD',
+        id: 'budget_' + uuidv4(),
+        created: new Date().toISOString(),
+        checkNumber: false,
+        rev: '',
+        deleted: false
+    };
 
     /**
      * Create a Budget
      *
-     * @param {object} [data] - The record object from the database
+     * @param rawData The record object from the database
      */
     constructor(rawData: BudgetData | any) {
-        if ('hints' in rawData) {
-            rawData.hintsOutflow = rawData.hints.outflow;
-            delete rawData.hintsOutflow;
-        }
+        rawData = Budget.migrateToNewBudget(rawData);
 
-        if ('_id' in rawData) {
-            rawData.id = rawData._id;
-            delete rawData._id;
-        }
+        this._data = angular.merge(this.DEFAULT_BUDGET, rawData);
 
-        if ('_rev' in rawData) {
-            rawData.rev = rawData._rev;
-            delete rawData._rev;
-        }
-
-        if ('_deleted' in rawData) {
-            rawData.deleted = rawData._deleted;
-            delete rawData._deleted;
-        }
-
-        this.data = angular.merge({
-            hintsOutflow: true,
-            name: null,
-            currency: 'USD',
-            id: 'budget_' + uuidv4(),
-            created: new Date().toISOString(),
-            checkNumber: false,
-            rev: '',
-            deleted: false
-        }, rawData);
-
-
-        /**
-         * Get the non-namespaced budget UID.
-         *
-         * @example
-         * const budget = new Budget();
-         * budget.id; // === 'ab735ea6-bd56-449c-8f03-6afcc91e2248'
-         *
-         * @type {string}
-         */
+        // Get the non-namespaced budget UID.
         this.id = this.data.id.slice(this.data.id.lastIndexOf('_') + 1);
+    }
+
+    private _data: BudgetData;
+
+    /**
+     * When a new change comes in from the _changes Pouch/Couch feed,
+     * update the raw record data through this getter/setter so that we
+     * have a chance to intercept it
+     *
+     * @type {object}
+     */
+    get data() {
+        return this._data;
     }
 
     /**
@@ -98,19 +84,8 @@ export class Budget {
         return this.startKey;
     }
 
-    /**
-     * When a new change comes in from the _changes Pouch/Couch feed,
-     * update the raw record data through this getter/setter so that we
-     * have a chance to intercept it
-     *
-     * @type {object}
-     */
-    get getData() {
-        return this.data;
-    }
-
-    set setData(data: BudgetData) {
-        this.data = data;
+    set data(data: BudgetData) {
+        this._data = data;
     }
 
     /**
@@ -130,11 +105,11 @@ export class Budget {
      * @type {object}
      */
     get hintsOutflow() {
-        return this.data.hintsOutflow;
+        return this._data.hintsOutflow;
     }
 
     set hintsOutflow(outflow: boolean) {
-        this.data.hintsOutflow = outflow;
+        this._data.hintsOutflow = outflow;
         this.emitChange();
     }
 
@@ -149,11 +124,11 @@ export class Budget {
      * @type {string}
      */
     get name() {
-        return this.data.name;
+        return this._data.name;
     }
 
     set name(name: string) {
-        this.data.name = name;
+        this._data.name = name;
         this.emitChange();
     }
 
@@ -168,11 +143,11 @@ export class Budget {
      * @type {string}
      */
     get currency() {
-        return this.data.currency;
+        return this._data.currency;
     }
 
     set currency(c) {
-        this.data.currency = c;
+        this._data.currency = c;
         this.emitChange();
     }
 
@@ -187,12 +162,25 @@ export class Budget {
      * @type {boolean}
      */
     get checkNumber() {
-        return this.data.checkNumber;
+        return this._data.checkNumber;
     }
 
     set checkNumber(c) {
-        this.data.checkNumber = c;
+        this._data.checkNumber = c;
         this.emitChange();
+    }
+
+    /**
+     * Get the complete `_id`, with namespace as set in the database.
+     *
+     * @example
+     * const budget = new Budget();
+     * budget._id; // === 'budget_ab735ea6-bd56-449c-8f03-6afcc91e2248'
+     *
+     * @type {string}
+     */
+    get wholeId() {
+        return this._data.id;
     }
 
     /**
@@ -211,19 +199,6 @@ export class Budget {
     }
 
     /**
-     * Get the complete `_id`, with namespace as set in the database.
-     *
-     * @example
-     * const budget = new Budget();
-     * budget._id; // === 'budget_ab735ea6-bd56-449c-8f03-6afcc91e2248'
-     *
-     * @type {string}
-     */
-    get wholeId() {
-        return this.data.id;
-    }
-
-    /**
      * Set the revision number of the record, via PouchDB. No getter.
      *
      * @example
@@ -233,7 +208,31 @@ export class Budget {
      * @type {string}
      */
     set rev(r: any) {
-        this.data.rev = r;
+        this._data.rev = r;
+    }
+
+    private static migrateToNewBudget(rawData: BudgetData | any): BudgetData {
+        if ('hints' in rawData) {
+            rawData.hintsOutflow = rawData.hints.outflow;
+            delete rawData.hintsOutflow;
+        }
+
+        if ('_id' in rawData) {
+            rawData.id = rawData._id;
+            delete rawData._id;
+        }
+
+        if ('_rev' in rawData) {
+            rawData.rev = rawData._rev;
+            delete rawData._rev;
+        }
+
+        if ('_deleted' in rawData) {
+            rawData.deleted = rawData._deleted;
+            delete rawData._deleted;
+        }
+
+        return rawData
     }
 
     /**
@@ -247,7 +246,7 @@ export class Budget {
     }
 
     remove() {
-        this.data.deleted = true;
+        this._data.deleted = true;
         return this.emitChange();
     }
 
