@@ -1,15 +1,6 @@
 import angular from 'angular';
-
-//@ts-ignore
-if (process.env.NODE_ENV === 'production') {
-  //@ts-ignore
-  require('./selfxssWarning');
-}
-
 //@ts-ignore
 import fastclick from 'fastclick';
-fastclick.attach(document.body);
-
 import 'angular';
 
 import 'lato-webfont/fonts/lato-hairline-webfont.woff';
@@ -34,8 +25,19 @@ import {react2angular} from 'react2angular/index';
 import {BudgetSelectorList} from './budgetSelector/budgetSelectorList.jsx';
 import {BudgetSelector} from './budgetSelector/budgetSelector.jsx';
 import {DbUrlEditor} from './budgetSelector/dbUrlEditor.jsx';
+import {BudgetMonthOverviewRow} from './budget/budgetMonthOverviewRow.jsx';
+import {BudgetMonthOverview} from './budget/budgetMonthOverview.jsx';
+
+//@ts-ignore
+if (process.env.NODE_ENV === 'production') {
+  //@ts-ignore
+  require('./selfxssWarning');
+}
+
+fastclick.attach(document.body);
 
 runConfig.$inject = ['$injector'];
+
 function runConfig($injector) {
   window.$injector = $injector;
 }
@@ -45,5 +47,7 @@ function runConfig($injector) {
 angular.module('financier')
   .component('budgetSelectorList', react2angular(BudgetSelectorList))
   .component('budgetSelector', react2angular(BudgetSelector))
+  .component('budgetMonthOverviewRow', react2angular(BudgetMonthOverviewRow))
+  .component('budgetMonthOverview', react2angular(BudgetMonthOverview))
   .component('dbUrlEditor', react2angular(DbUrlEditor))
   .run(runConfig);

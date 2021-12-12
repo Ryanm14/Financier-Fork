@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {timeDifference} from "./relativeTime";
 import {BudgetSelector} from "./budgetSelector.jsx";
+import {NewDB} from "../backend/newDb";
 
 function orderBudgets(budgets: Budget[], budgetsOrder: any) {
     const orderedBudgets: BudgetDetails[] = []
@@ -22,12 +23,15 @@ export const BudgetSelectorList = () => {
     const [budgetsOrder, setBudgetsOrder] = useState<any>({});
 
     useEffect(() => {
+        const db = NewDB.getInstance();
         // @ts-ignore
-        const db = window.$injector.get('db');
-        db.budgets.all().then((b: any) => {
+        const oldDb = window.$injector.get('db');
+        db.all().then((b: any) => {
             setBudgets(b);
         })
-        db.budgetsOpened.all().then((order: any) => {
+
+
+        db.allBudgetsOpened().then((order: any) => {
             setBudgetsOrder(order);
         })
     }, []);

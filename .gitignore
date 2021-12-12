@@ -11,3 +11,6 @@ npm-debug.log
 flagCtrl.js
 flags.js
 *.jsx
+newBudget.js
+newBudgetOpened.js
+newDb.js

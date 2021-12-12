@@ -252,3 +252,5 @@ angular.module('financier').factory('Budget', uuid => {
 
   return Budget;
 });
+
+
