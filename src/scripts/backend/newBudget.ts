@@ -1,43 +1,63 @@
 import {v4 as uuidv4} from 'uuid';
 import angular from "angular";
 
+interface BudgetData {
+    hintsOutflow: boolean,
+    name: string,
+    currency: string,
+    id: string,
+    created: string,
+    checkNumber: boolean,
+    rev: string,
+    deleted: boolean
+}
+
 /**
  * Represents a Budget project
  */
 export class Budget {
 
-    private readonly _hints: any;
-    private id: any;
     private fn: any;
+    private data: BudgetData;
+    private readonly id: string;
 
     /**
      * Create a Budget
      *
      * @param {object} [data] - The record object from the database
      */
-    constructor(data: any) {
-        this._data = angular.merge({
-            hints: {
-                outflow: true
-            },
+    constructor(rawData: BudgetData | any) {
+        if ('hints' in rawData) {
+            rawData.hintsOutflow = rawData.hints.outflow;
+            delete rawData.hintsOutflow;
+        }
+
+        if ('_id' in rawData) {
+            rawData.id = rawData._id;
+            delete rawData._id;
+        }
+
+        if ('_rev' in rawData) {
+            rawData.rev = rawData._rev;
+            delete rawData._rev;
+        }
+
+        if ('_deleted' in rawData) {
+            rawData.deleted = rawData._deleted;
+            delete rawData._deleted;
+        }
+
+        this.data = angular.merge({
+            hintsOutflow: true,
             name: null,
             currency: 'USD',
-            _id: 'budget_' + uuidv4(),
+            id: 'budget_' + uuidv4(),
             created: new Date().toISOString(),
-            checkNumber: false
-        }, data);
+            checkNumber: false,
+            rev: '',
+            deleted: false
+        }, rawData);
 
-        const that = this;
-
-        this._hints = {
-            get outflow() {
-                return that.data.hints.outflow;
-            },
-            set outflow(o) {
-                that.data.hints.outflow = o;
-                that.emitChange();
-            }
-        };
 
         /**
          * Get the non-namespaced budget UID.
@@ -48,7 +68,7 @@ export class Budget {
          *
          * @type {string}
          */
-        this.id = this._data._id.slice(this._data._id.lastIndexOf('_') + 1);
+        this.id = this.data.id.slice(this.data.id.lastIndexOf('_') + 1);
     }
 
     /**
@@ -78,8 +98,6 @@ export class Budget {
         return this.startKey;
     }
 
-    private _data: any;
-
     /**
      * When a new change comes in from the _changes Pouch/Couch feed,
      * update the raw record data through this getter/setter so that we
@@ -87,12 +105,12 @@ export class Budget {
      *
      * @type {object}
      */
-    get data() {
-        return this._data;
+    get getData() {
+        return this.data;
     }
 
-    set data(data) {
-        this._data = data;
+    set setData(data: BudgetData) {
+        this.data = data;
     }
 
     /**
@@ -111,8 +129,13 @@ export class Budget {
      *
      * @type {object}
      */
-    get hints() {
-        return this._hints;
+    get hintsOutflow() {
+        return this.data.hintsOutflow;
+    }
+
+    set hintsOutflow(outflow: boolean) {
+        this.data.hintsOutflow = outflow;
+        this.emitChange();
     }
 
     /**
@@ -126,11 +149,11 @@ export class Budget {
      * @type {string}
      */
     get name() {
-        return this._data.name;
+        return this.data.name;
     }
 
-    set name(n) {
-        this._data.name = n;
+    set name(name: string) {
+        this.data.name = name;
         this.emitChange();
     }
 
@@ -145,11 +168,11 @@ export class Budget {
      * @type {string}
      */
     get currency() {
-        return this._data.currency;
+        return this.data.currency;
     }
 
     set currency(c) {
-        this._data.currency = c;
+        this.data.currency = c;
         this.emitChange();
     }
 
@@ -164,11 +187,11 @@ export class Budget {
      * @type {boolean}
      */
     get checkNumber() {
-        return this._data.checkNumber;
+        return this.data.checkNumber;
     }
 
     set checkNumber(c) {
-        this._data.checkNumber = c;
+        this.data.checkNumber = c;
         this.emitChange();
     }
 
@@ -184,7 +207,7 @@ export class Budget {
      * @type {date}
      */
     get created() {
-        return new Date(this._data.created);
+        return new Date(this.data.created);
     }
 
     /**
@@ -196,8 +219,8 @@ export class Budget {
      *
      * @type {string}
      */
-    get _id() {
-        return this._data._id;
+    get wholeId() {
+        return this.data.id;
     }
 
     /**
@@ -209,8 +232,8 @@ export class Budget {
      *
      * @type {string}
      */
-    set _rev(r: any) {
-        this._data._rev = r;
+    set rev(r: any) {
+        this.data.rev = r;
     }
 
     /**
@@ -224,7 +247,7 @@ export class Budget {
     }
 
     remove() {
-        this._data._deleted = true;
+        this.data.deleted = true;
         return this.emitChange();
     }
 
@@ -254,6 +277,6 @@ export class Budget {
      * @returns {object}
      */
     toJSON() {
-        return this._data;
+        return this.data;
     }
 }

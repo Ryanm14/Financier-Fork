@@ -2,13 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {timeDifference} from "./relativeTime";
 import {BudgetSelector} from "./budgetSelector.jsx";
 import {NewDB} from "../backend/newDb";
+import {Budget} from "../backend/newBudget";
 
 function orderBudgets(budgets: Budget[], budgetsOrder: any) {
     const orderedBudgets: BudgetDetails[] = []
 
     const idToNameMap = new Map<string, string>();
-    budgets.forEach((budget) => {
-        idToNameMap.set(budget.id, budget._data.name)
+    budgets.forEach((budget: Budget) => {
+        idToNameMap.set(budget.id, budget.name)
     })
 
 
@@ -24,12 +25,10 @@ export const BudgetSelectorList = () => {
 
     useEffect(() => {
         const db = NewDB.getInstance();
-        // @ts-ignore
-        const oldDb = window.$injector.get('db');
+
         db.all().then((b: any) => {
             setBudgets(b);
         })
-
 
         db.allBudgetsOpened().then((order: any) => {
             setBudgetsOrder(order);
