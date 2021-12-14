@@ -47,7 +47,7 @@ function runConfig($injector) {
 angular.module('financier')
   .component('budgetSelectorList', react2angular(BudgetSelectorList))
   .component('budgetSelector', react2angular(BudgetSelector))
-  .component('budgetMonthOverviewRow', react2angular(BudgetMonthOverviewRow))
+  .component('budgetMonthOverviewRow', react2angular(BudgetMonthOverviewRow, [], ['$stateParams']))
   .component('budgetMonthOverview', react2angular(BudgetMonthOverview))
   .component('dbUrlEditor', react2angular(DbUrlEditor))
   .run(runConfig);

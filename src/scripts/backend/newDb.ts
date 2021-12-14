@@ -1,6 +1,7 @@
 import PouchDB from 'pouchdb';
 import {Budget} from "./newBudget";
 import {BudgetOpened} from "./newBudgetOpened";
+import {BudgetManager} from "./newBudgetManager";
 
 export class NewDB {
     private static instance: NewDB | null = null
@@ -73,5 +74,9 @@ export class NewDB {
 
             return budgetsOpened;
         });
+    }
+
+    budget(budgetId: string) {
+        return new BudgetManager(this.db, budgetId);
     }
 }

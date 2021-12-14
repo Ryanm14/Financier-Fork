@@ -24,7 +24,6 @@ interface AccountCacheData {
 }
 
 export class Account {
-    private static budgetId: any;
     id: string;
     transactions: any[];
     private data: AccountData;
@@ -101,8 +100,8 @@ export class Account {
      *
      * @type {string}
      */
-    static get startKey() {
-        return `b_${this.budgetId}_account_`;
+    static startKey(budgetId: string) {
+        return `b_${budgetId}_account_`;
     }
 
     /**
@@ -110,8 +109,8 @@ export class Account {
      *
      * @type {string}
      */
-    static get endKey() {
-        return this.startKey + '\uffff';
+    static endKey(budgetId: string) {
+        return this.startKey(budgetId) + '\uffff';
     }
 
     /**
@@ -119,8 +118,8 @@ export class Account {
      *
      * @type {string}
      */
-    static get prefix() {
-        return this.startKey;
+    static prefix(budgetId: string) {
+        return this.startKey(budgetId);
     }
 
     get constructorName() {
@@ -281,8 +280,8 @@ export class Account {
      * @returns {boolean} True if document _id is in the budget
      * as an account.
      */
-    static contains(_id: string) {
-        return _id > this.startKey && _id < this.endKey;
+    static contains(_id: string, budgetId: string) {
+        return _id > this.startKey(budgetId) && _id < this.endKey(budgetId);
     }
 
     /**

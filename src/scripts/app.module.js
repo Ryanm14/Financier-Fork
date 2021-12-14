@@ -191,6 +191,7 @@ financier.config(function (
     template: require('../views/appView.html'),
     controller: 'dbCtrl as dbCtrl',
     resolve: {
+      //myBudget = BudgetManager
       data: function (myBudget, $q) {
         return $q.all([
           myBudget.budget(),

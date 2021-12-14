@@ -1,5 +1,6 @@
 import {Transaction} from "./newTransaction";
 import angular from "angular";
+import {MonthCategory} from "./MonthCategory";
 
 interface MonthData {
     _id: string;
@@ -21,18 +22,18 @@ interface MonthCache {
  * Represents a Month
  */
 export class Month {
-    private static budgetId: any;
+    static budgetId: any;
     date: string;
     private saveFn: any;
-    private budgetId: any;
     private data: MonthData;
     private categories: any;
     private categoryCache: any;
-    private cache: MonthCache;
+    cache: MonthCache;
     private nextRollingFn: any;
     private nextChangeAvailableFn: any;
     private nextChangeOverspentFn: any;
     private nextChangeAvailableLastMonthFn: any;
+    private budgetIdField: string;
 
     /**
      * Create a Month
@@ -47,6 +48,7 @@ export class Month {
      */
     constructor(data: any, saveFn: any) {
         const defaults: any = {};
+        this.budgetIdField = "TESTING"
 
         this.saveFn = saveFn;
 
@@ -54,7 +56,7 @@ export class Month {
 
         if (angular.isString(data)) {
             myData = defaults;
-            myData._id = `b_${this.budgetId}_month_${data}`;
+            myData._id = `b_${this.budgetIdField}_month_${data}`;
         } else {
             myData = angular.extend(defaults, data);
         }
@@ -85,7 +87,7 @@ export class Month {
      *
      * @type {string}
      */
-    static get startKey() {
+    static startKey(budgetId: string) {
         return `b_${this.budgetId}_month_`;
     }
 
@@ -94,8 +96,8 @@ export class Month {
      *
      * @type {string}
      */
-    static get endKey() {
-        return this.startKey + '\uffff';
+    static endKey(budgetId: string) {
+        return this.startKey(budgetId) + '\uffff';
     }
 
     /**
@@ -103,8 +105,8 @@ export class Month {
      *
      * @type {string}
      */
-    static get prefix() {
-        return this.startKey;
+    static prefix(budgetId: string) {
+        return this.startKey(budgetId);
     }
 
     /**
@@ -128,8 +130,8 @@ export class Month {
      * @returns {boolean} True if document _id is in the budget
      * as a Month.
      */
-    static contains(_id: string) {
-        return _id > this.startKey && _id < this.endKey;
+    static contains(_id: string, budgetId: string) {
+        return _id > this.startKey(budgetId) && _id < this.endKey(budgetId);
     }
 
     /**
@@ -425,7 +427,7 @@ export class Month {
         this.createCategoryCacheIfEmpty(catId);
 
         if (!this.categories[catId]) {
-            this.categories[catId] = MonthCategory.from(this.budgetId, this.date, catId);
+            this.categories[catId] = MonthCategory.from(this.budgetIdField, this.date, catId);
 
             this.categories[catId].subscribe((record: any) => {
                 this.saveFn(record);

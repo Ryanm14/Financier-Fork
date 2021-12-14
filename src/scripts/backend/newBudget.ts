@@ -36,9 +36,11 @@ export class Budget {
      * @param rawData The record object from the database
      */
     constructor(rawData: BudgetData | any) {
-        rawData = Budget.migrateToNewBudget(rawData);
+        const migratedRawData = Budget.migrateToNewBudget(rawData);
+        console.log("newBudget: rawData= " + JSON.stringify(migratedRawData));
 
-        this._data = angular.merge(this.DEFAULT_BUDGET, rawData);
+        this._data = angular.merge(this.DEFAULT_BUDGET, migratedRawData);
+        console.log("newBudget: _data= " + JSON.stringify(this._data));
 
         // Get the non-namespaced budget UID.
         this.id = this.data.id.slice(this.data.id.lastIndexOf('_') + 1);
@@ -214,7 +216,7 @@ export class Budget {
     private static migrateToNewBudget(rawData: BudgetData | any): BudgetData {
         if ('hints' in rawData) {
             rawData.hintsOutflow = rawData.hints.outflow;
-            delete rawData.hintsOutflow;
+            delete rawData.hints;
         }
 
         if ('_id' in rawData) {

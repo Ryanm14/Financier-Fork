@@ -1,3 +1,5 @@
+import angular from "angular";
+
 interface MonthCategoryData {
     _deleted: boolean;
     _rev: any;
@@ -10,7 +12,7 @@ interface MonthCategoryData {
 /**
  * Represents a MonthCategory (containing a budget cell for the intersection of a given month and category).
  */
-class MonthCategory {
+export class MonthCategory {
     monthId: string;
     categoryId: string;
     private fn: any;

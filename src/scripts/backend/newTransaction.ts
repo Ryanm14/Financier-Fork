@@ -95,8 +95,8 @@ export class Transaction {
      *
      * @type {string}
      */
-    static get startKey() {
-        return `b_${this.budgetId}_transaction_`;
+    static startKey(budgetId: string) {
+        return `b_${budgetId}_transaction_`;
     }
 
     /**
@@ -104,8 +104,8 @@ export class Transaction {
      *
      * @type {string}
      */
-    static get endKey() {
-        return this.startKey + '\uffff';
+    static endKey(budgetId: string) {
+        return this.startKey(budgetId) + '\uffff';
     }
 
     /**
@@ -113,8 +113,8 @@ export class Transaction {
      *
      * @type {string}
      */
-    static get prefix() {
-        return this.startKey;
+    static prefix(budgetId: string) {
+        return this.startKey(budgetId);
     }
 
     private _date: Date | undefined;
@@ -510,8 +510,8 @@ export class Transaction {
      * @returns {boolean} True if document _id is in the budget
      * as a Transaction.
      */
-    static contains(_id: string) {
-        return _id > this.startKey && _id < this.endKey;
+    static contains(_id: string, budgetId: string) {
+        return _id > this.startKey(budgetId) && _id < this.endKey(budgetId);
     }
 
     addSplit(split: any) {

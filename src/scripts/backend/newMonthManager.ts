@@ -4,13 +4,14 @@
 import {Month} from "./newMonth";
 import {Account} from "./newAccount";
 import {Transaction} from "./newTransaction";
+import {MonthCategory} from "./MonthCategory";
 
 /**
  * Represents a MonthManager, responsible for
  * creating and linking Month objects together.
  */
-class MonthManager {
-    private months: Month[];
+export class MonthManager {
+    months: Month[];
     private accounts: any[];
     private allAccounts: Account;
     private transactions: any;
