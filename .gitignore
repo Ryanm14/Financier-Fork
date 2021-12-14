@@ -14,3 +14,15 @@ flags.js
 newBudget.js
 newBudgetOpened.js
 newDb.js
+monthCategory.js
+newAccount.js
+newCategory.js
+newCurrencies.js
+newDistance.js
+newFlags.js
+newMasterCategory.js
+newMonth.js
+newMonthManager.js
+newPayee.js
+newTransaction.js
+splitTransaction.js
