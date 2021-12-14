@@ -46,8 +46,8 @@ export class Category {
      *
      * @type {string}
      */
-    static get startKey() {
-        return `b_${this.budgetId}_category_`;
+    static startKey(budgetId: string) {
+        return `b_${budgetId}_category_`;
     }
 
     /**
@@ -55,8 +55,8 @@ export class Category {
      *
      * @type {string}
      */
-    static get endKey() {
-        return this.startKey + '\uffff';
+    static endKey(budgetId: string) {
+        return this.startKey(budgetId) + '\uffff';
     }
 
     /**
@@ -64,8 +64,8 @@ export class Category {
      *
      * @type {string}
      */
-    static get prefix() {
-        return this.startKey;
+    static prefix(budgetId: string) {
+        return this.startKey(budgetId);
     }
 
     private _data: CategoryData;
@@ -202,8 +202,8 @@ export class Category {
      * @returns {boolean} True if document _id is in the budget
      * as an category.
      */
-    static contains(_id: string) {
-        return _id > this.startKey && _id < this.endKey;
+    static contains(_id: string, budgetId: string) {
+        return _id > this.startKey(budgetId) && _id < this.endKey(budgetId);
     }
 
     setMasterAndSort(masterCategory: Category, i: number) {

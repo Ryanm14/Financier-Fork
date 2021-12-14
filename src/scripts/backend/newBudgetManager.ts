@@ -3,6 +3,7 @@ import {Account} from "./newAccount";
 import {Month} from "./newMonth";
 import {Transaction} from "./newTransaction";
 import {MonthManager} from "./newMonthManager";
+import {Category} from "./newCategory";
 
 export class BudgetManager {
     private budgetId: string;
@@ -128,4 +129,24 @@ export class BudgetManager {
         });
     }
 
+
+    categories_all() {
+        console.log("KEY", Category.startKey(this.budgetId))
+        return this.pouch.allDocs({
+            include_docs: true,
+            startkey: Category.startKey(this.budgetId),
+            endkey: Category.endKey(this.budgetId)
+        }).then((res: any) => {
+            const ret = {};
+
+            for (let i = 0; i < res.rows.length; i++) {
+                const cat = new Category(res.rows[i].doc);
+                // cat.subscribe(put);
+                // @ts-ignore
+                ret[cat.id] = cat;
+            }
+
+            return ret;
+        });
+    }
 }

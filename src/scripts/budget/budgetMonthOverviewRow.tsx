@@ -4,6 +4,7 @@ import {Month} from "../backend/newMonth";
 // @ts-ignore
 import moment from "moment";
 import {NewDB} from "../backend/newDb";
+import {MonthManager} from "../backend/newMonthManager";
 
 const getMonth = (manager: any, date: Date) => {
     manager.getMonth(date);
@@ -19,21 +20,30 @@ const getMonth = (manager: any, date: Date) => {
     }
 }
 
-export const BudgetMonthOverviewRow = (stateParams: any) => {
+export const BudgetMonthOverviewRow = ($stateParams: any) => {
 
-    const [manager, setManager] = useState(null);
+    const [categories, setCategories] = useState(null);
+    const [manager, setManager] = useState<MonthManager>(new MonthManager(undefined, null));
 
 
     useEffect(() => {
-        const budgetManager = NewDB.getInstance().budget(stateParams.budgetId)
+        const budgetManager = NewDB.getInstance().budget($stateParams.$stateParams.budgetId)
 
-        budgetManager.budget_all().then((manager: any) => {
+        budgetManager.budget_all().then((manager: MonthManager) => {
             setManager(manager);
-        })
+        });
+
+        budgetManager.categories_all().then((categories: any) => {
+            setCategories(categories);
+        });
     }, []);
 
+    if (manager && categories) {
+        manager.propagateRolling(Object.keys(categories))
+    }
 
-    const lastMonth = localStorage.getItem(`lastBudgetMonth_${stateParams.budgetId}`);
+
+    const lastMonth = localStorage.getItem(`lastBudgetMonth_${$stateParams.$stateParams.budgetId}`);
     let currentMonth = new Date();
     if (lastMonth) {
         currentMonth = new Date(lastMonth);

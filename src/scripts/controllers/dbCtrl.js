@@ -373,6 +373,7 @@ angular.module('financier').controller('dbCtrl', function (exportCsv, monthManag
 
   function getView(date) {
     // Make sure that we have the months
+    console.log(manager.months);
     manager.getMonth(date);
     const dateUntil = moment(date).add(5, 'months').toDate();
     manager.getMonth(dateUntil);
